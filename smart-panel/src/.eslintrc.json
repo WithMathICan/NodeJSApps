@@ -1,19 +1,19 @@
 {
-  "parserOptions": {
-    "sourceType": "module"
-  },
-  "globals": {
-    "sp": "readonly",
-    "db": "readonly",
-    "common": "readonly"
-  },
-  "rules": {
-    "strict": ["error", "never"],
-    "id-denylist": [
-      2,
-      "db",
-      "common",
-      "console"
-    ]
-  }
+   "parserOptions": {
+      "sourceType": "module"
+   },
+   "globals": {
+      "sp": "readonly"
+   },
+   "rules": {
+      "strict": [
+         "error",
+         "never"
+      ],
+      "id-denylist": [
+         2,
+         "db",
+         "console"
+      ]
+   }
 }
