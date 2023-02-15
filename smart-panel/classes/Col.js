@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+'use strict'
 
 class Col {
    /** @type {string} */ table_catalog

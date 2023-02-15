@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+'use strict'
 
 class Fk {
    foreign_table_schema = '';

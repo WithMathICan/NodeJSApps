@@ -1,9 +1,10 @@
-import {createCRUD} from 'common'
-import { createCols } from './src/lib/sp-functions'
-import { FSpModel } from './src/models/sp-model'
+import {createCRUD, slugify} from 'common'
+import { createCols } from './lib/sp-functions'
+import { FSpModel, FCreateSpModel } from './domain/models/sp-model'
 
 type TCreateCrud  = typeof createCRUD
 type TCreateCols = typeof createCols
+type TSlugify = typeof slugify
 
 export global {
    namespace sp{
@@ -11,5 +12,7 @@ export global {
       const PG_DATABASE: string
       const createCols: TCreateCols
       const models: Record<string, FSpModel>
+      const createSpModel: FCreateSpModel
+      const slugify: TSlugify
    }
 }

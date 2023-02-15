@@ -1,3 +1,5 @@
+'use strict'
+
 const { Col } = require('../classes/Col');
 const { Fk } = require('../classes/Fk');
 
@@ -49,7 +51,7 @@ WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema=$1 AND tc.table_nam
 * @param {import('pg').PoolClient} pgClient
 * @returns {Promise<Col[]>}
 */
-async function spCreateCols(schema, table, database, pgClient) {
+async function createCols(schema, table, database, pgClient) {
    const dbCols = await pgClient.query(MY_SQL_COLS, [database, schema, table])
    const cols = dbCols.rows.map(el => new Col(el))
    const dbFkData = await pgClient.query(MY_SQL_FK, [schema, table])
@@ -83,4 +85,4 @@ async function spFindDbTables(schemas, pgClient) {
    return dbTables
 }
 
-module.exports = { spCreateCols, spFindDbTables }
+module.exports = { createCols, spFindDbTables }

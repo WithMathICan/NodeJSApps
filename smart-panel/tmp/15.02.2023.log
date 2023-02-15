@@ -4,3 +4,29 @@
 [LOG  ] [2023-02-15T18:27:10] Server started on port 3000
 [LOG  ] [2023-02-15T18:28:40] Db connected successfully
 [LOG  ] [2023-02-15T18:28:40] Server started on port 3000
+[LOG  ] [2023-02-15T20:00:16] Db connected successfully
+[LOG  ] [2023-02-15T20:00:16] Server started on port 3000
+[LOG  ] [2023-02-15T20:03:22] Db connected successfully
+[LOG  ] [2023-02-15T20:03:22] Server started on port 3000
+[LOG  ] [2023-02-15T20:03:22] TypeError: createCols is not a function
+    at createInterfaceByCols (D:\Creating\NodeJSApps\smart-panel\lib\create-interfaces.js:21:26)
+    at createInterfaces (D:\Creating\NodeJSApps\smart-panel\lib\create-interfaces.js:39:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[LOG  ] [2023-02-15T20:03:31] Db connected successfully
+[LOG  ] [2023-02-15T20:03:31] Server started on port 3000
+[LOG  ] [2023-02-15T20:03:31] TypeError: createCols is not a function
+    at createInterfaceByCols (D:\Creating\NodeJSApps\smart-panel\lib\create-interfaces.js:21:26)
+    at createInterfaces (D:\Creating\NodeJSApps\smart-panel\lib\create-interfaces.js:39:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[LOG  ] [2023-02-15T20:04:24] Db connected successfully
+[LOG  ] [2023-02-15T20:04:24] Server started on port 3000
+[LOG  ] [2023-02-15T20:05:12] Db connected successfully
+[LOG  ] [2023-02-15T20:05:12] Server started on port 3000
+[LOG  ] [2023-02-15T20:06:48] Db connected successfully
+[LOG  ] [2023-02-15T20:06:48] Server started on port 3000
+[LOG  ] [2023-02-15T20:07:54] Db connected successfully
+[LOG  ] [2023-02-15T20:07:54] Server started on port 3000
+[LOG  ] [2023-02-15T20:09:00] Db connected successfully
+[LOG  ] [2023-02-15T20:09:00] Server started on port 3000
+[LOG  ] [2023-02-15T20:11:12] Db connected successfully
+[LOG  ] [2023-02-15T20:11:12] Server started on port 3000
