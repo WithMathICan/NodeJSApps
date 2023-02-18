@@ -15,8 +15,8 @@ const createServer = (routers, console) => http.createServer(async (req, res) =>
       assert(req.method && req.url, 'Page not found')
       const method = req.method.toUpperCase()
       const parsedUrl = nodeUrl.parse(req.url, true)
-      assert(parsedUrl.pathname, 'Pathname is undefined')
       console.log(method, parsedUrl.path);
+      assert(parsedUrl.pathname, 'Pathname is undefined')
       let resData = null
       /** @type {import('./router').IRouterArgs} */
       const args = { method, url: parsedUrl.pathname, getParams: parsedUrl.query }
