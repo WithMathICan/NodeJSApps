@@ -48,13 +48,13 @@ WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema=$1 AND tc.table_nam
 * @param {string} schema
 * @param {string} table
 * @param {string} database
-* @param {import('pg').PoolClient} pgClient
+* @param {import('./sp-functions').TQuery} query
 * @returns {Promise<Col[]>}
 */
-async function createCols(schema, table, database, pgClient) {
-   const dbCols = await pgClient.query(MY_SQL_COLS, [database, schema, table])
+async function createCols(schema, table, database, query) {
+   const dbCols = await query(MY_SQL_COLS, [database, schema, table])
    const cols = dbCols.rows.map(el => new Col(el))
-   const dbFkData = await pgClient.query(MY_SQL_FK, [schema, table])
+   const dbFkData = await query(MY_SQL_FK, [schema, table])
    /** @type {import('../classes/Fk').IFk[]} */ const dbFk = dbFkData.rows
 
    for (const fk of dbFk) {
@@ -71,15 +71,15 @@ async function createCols(schema, table, database, pgClient) {
 
 /**
 * @param {string[]} schemas
-* @param {import('pg').Pool} pgClient
+* @param {import('./sp-functions').TQuery} query
 * @returns {Promise<Record<string, string[]>>}
 */
-async function spFindDbTables(schemas, pgClient) {
+async function spFindDbTables(schemas, query) {
    /** @type {Record<string, string[]>} */
    const dbTables = {};
    for (const schema of schemas) {
       const sql = 'SELECT table_name FROM information_schema.tables WHERE table_schema = $1'
-      const { rows } = await pgClient.query(sql, [schema])
+      const { rows } = await query(sql, [schema])
       if (rows.length > 0) dbTables[schema] = rows.map(el => el.table_name)
    }
    return dbTables

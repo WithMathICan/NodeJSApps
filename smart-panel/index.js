@@ -18,7 +18,7 @@ const pool = createPgPool(config.DB_SETTINGS)
 
 pool.query('SELECT 1+1').then(() => {
    logger.log('Db connected successfully')
-   createInterfaces(config.DB_SCHEMAS, config.DB_SETTINGS.database, pool, config.RPOJECT_ROOT + '/domain/models')
+   createInterfaces(config.DB_SCHEMAS, config.DB_SETTINGS.database, (a, b) => pool.query(a, b), config.RPOJECT_ROOT + '/domain/models')
    const staticRouter = createStaticRouter(config.RPOJECT_ROOT + '/public', logger)
    const server = createServer([staticRouter], logger)
    server.listen(config.PORT)

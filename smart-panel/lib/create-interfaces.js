@@ -7,10 +7,10 @@ const path = require('node:path')
 /**
  * @param {string[]} dbSchemas
  * @param {string} database
- * @param {import('pg').Pool} pgClient
+ * @param {import('./sp-functions').TQuery} query
  * @param {string} dbDir
  */
-async function createInterfaces(dbSchemas, database, pgClient, dbDir) {
+async function createInterfaces(dbSchemas, database, query, dbDir) {
    /**
     * @param {string} schema
     * @param {string} table
@@ -18,7 +18,7 @@ async function createInterfaces(dbSchemas, database, pgClient, dbDir) {
     */
    async function createInterfaceByCols(schema, table) {
       /** @type {import('../classes/Col').Col[]} */
-      const cols = await createCols(schema, table, database, pgClient)
+      const cols = await createCols(schema, table, database, query)
       let str = `export interface ${schema}_${table}{\n`
       for (const col of cols) {
          const dataType = col.data_type === 'date' ? 'Date' :
@@ -32,7 +32,7 @@ async function createInterfaces(dbSchemas, database, pgClient, dbDir) {
    }
 
    /** @type {Record<string, string[]>} */
-   const dbTables = await spFindDbTables(dbSchemas, pgClient)
+   const dbTables = await spFindDbTables(dbSchemas, query)
    for (const schema in dbTables) {
       let interfaces = ''
       for (const table of dbTables[schema]) {

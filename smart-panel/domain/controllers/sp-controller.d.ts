@@ -1,4 +1,5 @@
 import {Pool} from 'pg'
+import {IDb} from 'common/src/pgwrap'
 
 export interface IApiResult<T>{
    statusCode: number

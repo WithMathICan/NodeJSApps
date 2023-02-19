@@ -1,4 +1,5 @@
 import pg from 'pg'
+import { IDb } from './pgwrap'
 
 export type DbRecord = {
    [x: string]: any
@@ -15,5 +16,5 @@ export interface ICrud {
    removeMany(ids: string[]): Promise<string[]>
 }
 
-export function createCRUD(schema: string, table: string, pg_client: pg.PoolClient): ICrud
-export type FCreateCRUD = (schema: string, table: string, pg_client: pg.PoolClient) => ICrud
+export function createCRUD(schema: string, table: string, pgWrap: IDb): ICrud
+export type FCreateCRUD = typeof createCRUD

@@ -1,5 +1,7 @@
-import {PoolClient, Pool} from 'pg'
+import {PoolClient, Pool, QueryResult} from 'pg'
 
-export function createCols(schema: string, table: string, database: string, pg_client: PoolClient | Pool) : Promise<Col[]>
-export function spFindDbTables(schemas: string[], pg_client: Pool) : Promise<Record<string, string[]>>
+export type TQuery = (sql: string, arr: any[]) => Promise<QueryResult>
+
+export function createCols(schema: string, table: string, database: string, query: TQuery) : Promise<Col[]>
+export function spFindDbTables(schemas: string[], query: TQuery) : Promise<Record<string, string[]>>
 

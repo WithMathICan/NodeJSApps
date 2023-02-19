@@ -1,6 +1,7 @@
 import { Col } from 'classes/Col'
 import { DbRecord } from './crud'
 import {PoolClient, Pool} from 'pg'
+import {ICrud} from 'common/src/crud'
 
 
 export interface ISpModel {
@@ -12,6 +13,7 @@ export interface ISpModel {
    removeMany(ids: string[]): Promise<string[]>
 }
 
-export type FSpModel = (pg_client: PoolClient | Pool) => ISpModel;
+export type FSpModel = (pgWrap: ICrud) => ISpModel;
 export function createSpModel(schema: string, table: string) : FSpModel
 export type FCreateSpModel = typeof createSpModel
+export {ICrud}
