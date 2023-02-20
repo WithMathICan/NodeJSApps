@@ -1,0 +1,11 @@
+{
+   "extends" : "plugin:vue/vue3-recommended",
+   "rules": {
+      "indent": ["error", 3],
+      "vue/max-attributes-per-line": ["error", {
+         "singleline": { "max": 50 },      
+         "multiline": { "max": 5}
+      }],
+      "vue/html-indent": ["error", 3]
+   }
+}
