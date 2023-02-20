@@ -74,7 +74,7 @@ async function createCols(schema, table, database, query) {
 * @param {import('./sp-functions').TQuery} query
 * @returns {Promise<Record<string, string[]>>}
 */
-async function spFindDbTables(schemas, query) {
+async function findDbTables(schemas, query) {
    /** @type {Record<string, string[]>} */
    const dbTables = {};
    for (const schema of schemas) {
@@ -85,4 +85,4 @@ async function spFindDbTables(schemas, query) {
    return dbTables
 }
 
-module.exports = { createCols, spFindDbTables }
+module.exports = { createCols, findDbTables }

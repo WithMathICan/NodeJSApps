@@ -1,6 +1,6 @@
 'use strict'
 
-const { createCols, spFindDbTables } = require('./sp-functions.js')
+const { createCols, findDbTables } = require('./sp-functions.js')
 const fs = require('node:fs')
 const path = require('node:path')
 
@@ -32,7 +32,7 @@ async function createInterfaces(dbSchemas, database, query, dbDir) {
    }
 
    /** @type {Record<string, string[]>} */
-   const dbTables = await spFindDbTables(dbSchemas, query)
+   const dbTables = await findDbTables(dbSchemas, query)
    for (const schema in dbTables) {
       let interfaces = ''
       for (const table of dbTables[schema]) {
@@ -41,7 +41,5 @@ async function createInterfaces(dbSchemas, database, query, dbDir) {
       await fs.promises.writeFile(path.join(dbDir, `${schema}.ts`), interfaces)
    }
 }
-
-
 
 module.exports = { createInterfaces }

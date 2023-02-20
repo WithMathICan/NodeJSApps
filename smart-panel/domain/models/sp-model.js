@@ -23,7 +23,7 @@
             beans: (fields = ['*']) => crud.queryAll(`select ${fields.join(',')} from ${crud.tableName} order by id desc`),
             removeMany: (ids) => crud.removeMany(ids)
          }
-         return SpModel
+         return Object.freeze(SpModel)
       }
       return model
    }

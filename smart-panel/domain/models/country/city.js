@@ -8,10 +8,10 @@
 
    /**
     * @type {import("../sp-model").FSpModel}
-    * @param {import('pg').PoolClient} pgClient
+    * @param {import('../sp-model').ICrud} crud
     */
-   function model(pgClient) {
-      const baseModel = sp.createSpModel('country', 'city')(pgClient);
+   const model = (crud) => {
+      const baseModel = sp.createSpModel('country', 'city')(crud);
 
       /** @type {import("../sp-model").ISpModel} */
       const modelObj = {

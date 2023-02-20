@@ -1,5 +1,6 @@
 import {Pool} from 'pg'
 import {IDb} from 'common/src/pgwrap'
+import { ICrud } from '../models/sp-model'
 
 export interface IApiResult<T>{
    statusCode: number
@@ -16,6 +17,6 @@ export interface ITableApi{
    removeMany(args: {ids: string[]}): Promise<IApiResult<string[]>>
 }
 
-export function createSpController(schema: string, table: string, pool: Pool) : ITableApi
+export function createSpController(schema: string, table: string, crud: ICrud) : ITableApi
 export type FCreateSpController = typeof createSpController
 // export type FTableApi<T> = (args) => Promise<IApiResult<T>>
