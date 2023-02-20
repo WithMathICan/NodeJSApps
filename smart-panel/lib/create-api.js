@@ -1,7 +1,7 @@
 'use strict'
 
 const fs = require('node:fs')
-const { load, createCRUD } = require('../../common')
+const { load, createCRUD, initDbClientCreator,  } = require('../../common')
 const { findDbTables } = require('./sp-functions')
 
 
@@ -14,7 +14,10 @@ const { findDbTables } = require('./sp-functions')
  * @returns {Promise<import('server/router').FRouter<{message: string, result: any}>>}
  */
 async function createApiRouter(PG_DATABASE, DB_SCHEMAS, pool, domainDir, console) {
-   const dbTables = await findDbTables(DB_SCHEMAS, (a, b) => pool.query(a, b))
+   /** @type {import('common/types').FQuery} */
+   const poolQuery = (a, b) => pool.query(a, b)
+   const dbTables = await findDbTables(DB_SCHEMAS, poolQuery)
+   //const dbClientCreator = initDbClientCreator(pool)
 
    /** @returns {import('../domain/models/sp-model').FCreateSpModel} */
    function loadSpModel() {
@@ -55,7 +58,7 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, pool, domainDir, console
    function loadSpController(models) {
       const sandbox = Object.freeze({
          console: Object.freeze(console),
-         sp: Object.freeze({ models }),
+         sp: Object.freeze({ models, createCRUD }),
       })
       const controllerSrc = fs.readFileSync(domainDir + '/controllers/sp-controller.js', { encoding: 'utf-8' })
       const { createSpController } = load(controllerSrc, sandbox)

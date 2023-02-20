@@ -3,13 +3,12 @@
     * @type {import('./sp-controller').FCreateSpController}
     * @param {string} schema
     * @param {string} table
-    * @param {import('../models/sp-model').ICrud} crud
     */
-   createSpController: (schema, table, crud) => {
+   createSpController: (schema, table) => {
       const tableName = `${schema}.${table}`;
       const fModel = sp.models[tableName]
       if (!fModel) throw new Error('Model not found')
-      const model = fModel(crud)
+      const model = fModel(sp.createCRUD(schema, table, sp.poolQuery))
 
       /** @type {import('./sp-controller').ITableApi} */
       const crudApi = {

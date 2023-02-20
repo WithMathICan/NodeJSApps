@@ -7,7 +7,7 @@ const path = require('node:path')
 /**
  * @param {string[]} dbSchemas
  * @param {string} database
- * @param {import('./sp-functions').TQuery} query
+ * @param {import('common/types').FQuery} query
  * @param {string} dbDir
  */
 async function createInterfaces(dbSchemas, database, query, dbDir) {

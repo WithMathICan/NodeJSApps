@@ -2,6 +2,10 @@
   "name": "common",
   "version": "1.0.0",
   "description": "",
+  "exports": {
+    "require": "./main.js",
+    "types": "./types.d.ts"
+  },
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

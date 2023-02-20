@@ -4,13 +4,25 @@
  * @type {import("./crud").FCreateCRUD}
  * @param {string} schema
  * @param {string} table
- * @param {import('./pgwrap').IDb} pgWrap
+ * @param {import('./crud').FQuery} query
  * @returns {import('./crud').ICrud}
  */
-const createCRUD = (schema, table, pgWrap) => {
+const createCRUD = (schema, table, query) => {
    const tableName = `${schema}.${table}`
 
-   const { query, queryAll, queryFirst } = pgWrap
+   /**
+    * @param {string} sql
+    * @param {any[]} arr
+    * @returns {Promise<import('./crud').DbRecord[]>}
+    */
+   const queryAll = async (sql, arr = []) => (await query(sql, arr)).rows
+
+   /**
+    * @param {string} sql
+    * @param {any[]} arr
+    * @returns {Promise<import('./crud').DbRecord>}
+    */
+   const queryFirst = async (sql, arr = []) => (await query(sql, arr)).rows[0]
 
    /**
     * @param {string} id

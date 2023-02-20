@@ -48,7 +48,7 @@ WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema=$1 AND tc.table_nam
 * @param {string} schema
 * @param {string} table
 * @param {string} database
-* @param {import('./sp-functions').TQuery} query
+* @param {import('common/types').FQuery} query
 * @returns {Promise<Col[]>}
 */
 async function createCols(schema, table, database, query) {
@@ -71,7 +71,7 @@ async function createCols(schema, table, database, query) {
 
 /**
 * @param {string[]} schemas
-* @param {import('./sp-functions').TQuery} query
+* @param {import('common/types').FQuery} query
 * @returns {Promise<Record<string, string[]>>}
 */
 async function findDbTables(schemas, query) {
