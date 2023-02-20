@@ -10,12 +10,13 @@ export interface IApiResult<T>{
 }
 
 export interface ITableApi{
-   cols() : Promise<IApiResult<Col[]>>
-   bean(args: {id: string, fields: string[]}): Promise<IApiResult<DbRecord | null>>
-   beans(args: {fields: string[]}): Promise<IApiResult<DbRecord[]>>
-   insert(record: DbRecord): Promise<IApiResult<DbRecord | null>>
-   update(record: DbRecord): Promise<IApiResult<DbRecord | null>>
-   removeMany(args: {ids: string[]}): Promise<IApiResult<string[]>>
+   [x: string]: (args: any) => Promise<IApiResult<any>>
+   cols: () => Promise<IApiResult<Col[]>>
+   bean: (args: {id: string, fields: string[]}) => Promise<IApiResult<DbRecord | null>>
+   beans: (args: {fields: string[]}) => Promise<IApiResult<DbRecord[]>>
+   insert: (record: DbRecord) => Promise<IApiResult<DbRecord | null>>
+   update: (record: DbRecord) => Promise<IApiResult<DbRecord | null>>
+   removeMany: (args: {ids: string[]}) => Promise<IApiResult<string[]>>
 }
 
 export function createSpController(schema: string, table: string) : ITableApi
