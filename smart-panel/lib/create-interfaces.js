@@ -8,9 +8,9 @@ const path = require('node:path')
  * @param {string[]} dbSchemas
  * @param {string} database
  * @param {import('common/types').FQuery} query
- * @param {string} dbDir
+ * @param {string} domainDir
  */
-async function createInterfaces(dbSchemas, database, query, dbDir) {
+async function createInterfaces(dbSchemas, database, query, domainDir) {
    /**
     * @param {string} schema
     * @param {string} table
@@ -38,7 +38,7 @@ async function createInterfaces(dbSchemas, database, query, dbDir) {
       for (const table of dbTables[schema]) {
          interfaces += await createInterfaceByCols(schema, table) + '\n'
       }
-      await fs.promises.writeFile(path.join(dbDir, `${schema}.ts`), interfaces)
+      await fs.promises.writeFile(path.join(domainDir, `${schema}.ts`), interfaces)
    }
 }
 

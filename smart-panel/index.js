@@ -22,7 +22,7 @@ pool.query('SELECT 1+1').then(async () => {
    const PG_DATABASE = config.DB_SETTINGS.database
    /** @type {import('common/types').FQuery} */
    const poolQuery = (a, b) => pool.query(a, b)
-   createInterfaces(config.DB_SCHEMAS, PG_DATABASE, poolQuery, config.RPOJECT_ROOT + '/domain/models')
+   createInterfaces(config.DB_SCHEMAS, PG_DATABASE, poolQuery, config.RPOJECT_ROOT + '/domain')
    const staticRouter = createStaticRouter(config.RPOJECT_ROOT + '/public', logger)
    const apiRouter = await createApiRouter(PG_DATABASE, config.DB_SCHEMAS, poolQuery, config.RPOJECT_ROOT + '/domain', config.SP_NAME, logger)
    const server = createServer([staticRouter, apiRouter], logger)
