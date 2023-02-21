@@ -1,7 +1,7 @@
 'use strict'
 
 const fs = require('node:fs')
-const { load, createCRUD, slugify  } = require('../../common')
+const { load, createCRUD, slugify, kebabToCamelCase  } = require('../../common')
 const { findDbTables, createCols } = require('./sp-functions')
 
 const HEADERS = {
@@ -93,6 +93,7 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
    }
 
    const controllers = loadApiControllers()
+   // console.log(controllers);
 
    /**
     * @param {any} result
@@ -122,7 +123,7 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
          if (!schemaHandler) return null
          const tableHandler = schemaHandler[urlArr[3]]
          if (!tableHandler) return null
-         const handler = tableHandler[urlArr[4]]
+         const handler = tableHandler[kebabToCamelCase(urlArr[4])]
          if (!handler) return null
          const resData = await handler(args.postParams)
          return createResponse(resData.result, resData.message, resData.statusCode)

@@ -12,7 +12,7 @@
                :severity="msg.severity"
                @close="msgClose(msg.id)"
             >
-               {{ msg.content }}
+               <b>{{ msg.content }}</b>
             </Message>
          </transition-group>
       </div>

@@ -34,3 +34,18 @@ CREATE TABLE country.city(
     CONSTRAINT fk_city_region_id FOREIGN KEY (region_id) REFERENCES country.region(id) ON DELETE NO ACTION
 );
 
+CREATE TABLE country.tags(
+    id SERIAL,
+    title VARCHAR(50) NOT NULL,
+    alias VARCHAR(50) NOT NULL,
+    PRIMARY KEY(id)
+);
+-- ALTER TABLE country.tags ADD CONSTRAINT country_tags_unique_alias UNIQUE (alias);
+CREATE UNIQUE INDEX country_tags_unique_alias ON country.tags(alias);
+
+CREATE TABLE country.city___tags(
+    city_id INTEGER,
+    tag_alias VARCHAR(50),
+    PRIMARY KEY (city_id, tag_alias)
+)
+

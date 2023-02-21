@@ -6,6 +6,7 @@ const { SpLogger } = require('./src/logger.js')
 const { createCRUD } = require('./src/crud.js')
 const load = require('./src/load.js')
 const { initDbClientCreator } = require('./src/dbClient')
+const { kebabToCamelCase, kebabToPascalCase } = require('./src/string-cases.js')
 
 module.exports = {
    SpLogger,
@@ -14,4 +15,6 @@ module.exports = {
    createCRUD,
    load,
    initDbClientCreator,
+   kebabToCamelCase,
+   kebabToPascalCase,
 }
