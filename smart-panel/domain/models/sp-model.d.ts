@@ -13,7 +13,7 @@ export interface ISpModel {
    removeMany(ids: string[]): Promise<string[]>
 }
 
-export type FSpModel = (pgWrap: ICrud) => ISpModel;
+export type FSpModel = (crud: ICrud) => ISpModel;
 export function createSpModel(schema: string, table: string) : FSpModel
 export type FCreateSpModel = typeof createSpModel
 export {ICrud}

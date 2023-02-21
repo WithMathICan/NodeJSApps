@@ -1,7 +1,7 @@
 'use strict'
 
 const fs = require('node:fs')
-const { load, createCRUD  } = require('../../common')
+const { load, createCRUD, slugify  } = require('../../common')
 const { findDbTables, createCols } = require('./sp-functions')
 
 const HEADERS = {
@@ -44,7 +44,7 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
       const createSpModel = loadSpModel()
       const sandbox = Object.freeze({
          console: Object.freeze(console),
-         sp: Object.freeze({ createSpModel }),
+         sp: Object.freeze({ createSpModel, slugify }),
       })
       for (const schema in dbTables) {
          for (const table of dbTables[schema]) {

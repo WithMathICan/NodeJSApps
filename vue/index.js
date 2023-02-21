@@ -17,6 +17,7 @@ import { API_PATH } from './config'
 import { createRouter, createWebHistory } from 'vue-router'
 import { CreateRoutes } from './src/router';
 import { CreateApi } from './src/api';
+import { ClearMessages } from './src/messages'
 
 async function start() {
    try {
@@ -29,6 +30,7 @@ async function start() {
       CreateApi(result, API_PATH)
       const routes = CreateRoutes(result)
       const router = createRouter({ history: createWebHistory(), routes })
+      router.beforeEach(() => ClearMessages())
       createApp(App).use(PrimeVue).use(ConfirmationService).use(router).mount('#root')
    } catch (e) {
       console.log(e);

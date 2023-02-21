@@ -15,12 +15,10 @@
       /** @type {import("../sp-model").ISpModel} */
       const modelObj = {
          ...baseModel,
-         /** @param {import("../../country").country_city} record */
          async update(record) {
             beforeSave(record);
             return baseModel.update(record);
          },
-         /** @param {import("../../country").country_city} record */
          async insert(record) {
             beforeSave(record);
             return baseModel.insert(record);

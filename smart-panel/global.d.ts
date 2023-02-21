@@ -14,7 +14,7 @@ export global {
       const PG_DATABASE: string
       const createCols: TCreateCols
       const models: Record<string, FSpModel>
-      //const createSpModel: FCreateSpModel
+      const createSpModel: FCreateSpModel
       const slugify: TSlugify
       const poolQuery: FQuery
    }
