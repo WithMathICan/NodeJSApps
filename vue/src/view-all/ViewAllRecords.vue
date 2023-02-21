@@ -191,18 +191,6 @@ function linkToEdit(bean) {
    return { name: 'edit', params: { schema: props.schema, table: props.table, id: bean.id } }
 }
 
-// const filters = ref({
-//    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-//    id: {
-//       operator: FilterOperator.AND,
-//       constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-//    },
-//    title: {
-//       operator: FilterOperator.AND,
-//       constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-//    },
-// })
-
 /** @param {import('types').Col} col */
 function findDataType(col){
    if (col.data_type === 'date') return 'date'

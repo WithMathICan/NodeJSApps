@@ -13,7 +13,8 @@
     "strictFunctionTypes": true,
     "skipDefaultLibCheck": false,
     "strictNullChecks": true,
-    "useDefineForClassFields": true
+    "useDefineForClassFields": true,
+    "noImplicitAny": false,
   },
   "include": ["*", "**/*"],
   "exclude": ["vue/**/*"]

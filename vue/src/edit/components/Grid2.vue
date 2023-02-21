@@ -22,7 +22,7 @@ onUnmounted(() => {
    window.removeEventListener('resize', setGridClass);
 })
 </script>
-<!-- 
+
 <style lang="scss" scoped>
 .dynamic-grid{
    display: grid;
@@ -38,4 +38,4 @@ onUnmounted(() => {
    grid-template-columns: 1fr;
    row-gap: 10px;
 }
-</style> -->
+</style>
