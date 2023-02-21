@@ -11,9 +11,15 @@ export default defineComponent({
    /** @param {{bean: any, col: import('types').Col}} props */
    setup({bean, col}) {
       function showDate() {
-         let date = new Date(bean[col.column_name])
-         bean[col.column_name] = date
+         let date = setDate()
          return new Intl.DateTimeFormat("ru", { dateStyle: 'short', timeStyle: 'short' }).format(date)
+      }
+
+      function setDate(){
+         if (typeof bean[col.column_name] === 'string'){
+            bean[col.column_name] = new Date(bean[col.column_name])
+         }
+         return bean[col.column_name]
       }
 
       return {showDate}

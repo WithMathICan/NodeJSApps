@@ -14,6 +14,7 @@ let props = defineProps(['schema', 'table', 'ids', 'label', 'deleteCb'])
 
 
 const confirm = useConfirm();
+/** @param {any} event */
 const confirmDelete = (event) => {
    confirm.require({
       target: event.currentTarget,

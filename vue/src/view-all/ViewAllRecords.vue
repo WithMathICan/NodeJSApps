@@ -117,6 +117,7 @@ const filters = ref(createFilters())
 
 function createFilters(){
    let cols = spColsData[tableKey.value]
+   /** @type {any} */
    let filter = {
       // glob: {value: null, matchMode: FilterMatchMode.CONTAINS},
       id: {
@@ -144,12 +145,12 @@ function createFilters(){
    return filter
 }
 
-/** @type {import('vue').Ref<import('../api').Col[]>} */
+/** @type {import('vue').Ref<import('types').Col[]>} */
 let selectedColumns = ref([])
 
 let localStorageKey = computed(() => `key-view-all-${props.schema}-${props.table}`)
 
-/** @param {import('../api').Col[]} val*/
+/** @param {import('primevue/multiselect').MultiSelectAllChangeEvent} val*/
 function onToggle(val) {
    if (!Array.isArray(val)) return
    localStorage.setItem(localStorageKey.value, val.map(col => col.column_name).join(','))
@@ -158,7 +159,7 @@ function onToggle(val) {
    }
 };
 
-/** @param {import('../api').Col[]} cols*/
+/** @param {import('types').Col[]} cols*/
 function setInitialCols(cols){
    let fields = localStorage.getItem(localStorageKey.value)
    if (fields){
@@ -193,7 +194,7 @@ function linkToEdit(bean) {
 //    },
 // })
 
-/** @param {import('../api').Col} col */
+/** @param {import('types').Col} col */
 function findDataType(col){
    if (col.data_type === 'date') return 'date'
    else if (col.data_type === 'number') return 'numeric'

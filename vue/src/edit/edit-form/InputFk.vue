@@ -10,7 +10,7 @@ import { FillBeans, spBeans, spTableKey } from '../../store';
 import Dropdown from 'primevue/dropdown'
 import { computed } from '@vue/reactivity';
 
-/** @type {{bean: any, col: import('vue/types').Col}} */
+/** @type {{bean: any, col: import('types').Col}} */ // @ts-ignore
 let props = defineProps(['bean', 'col']) 
 let {fk} = props.col
 

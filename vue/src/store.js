@@ -9,10 +9,10 @@ import { showMessage } from './messages.js'
  */
 export const spTableKey = (schema, table) => `${schema}.${table}`
 
-/** @type {{[x:string]: import('vue/types').Col[]}} */
+/** @type {{[x:string]: import('types').Col[]}} */
 export const spColsData = reactive({})
 
-/** @type {{[x:string]: import('vue/types').DbRecord[] }} */
+/** @type {{[x:string]: import('types').DbRecord[] }} */
 export const spBeans = reactive({})
 
 /** @type {{[x:string]: boolean}} */
@@ -26,7 +26,7 @@ export const loading = ref(false)
  * @param {*} spCols
  * @param {*} getMethod
  * @param {boolean} refresh
- * @returns {Promise<import('vue/types').Col[]>}
+ * @returns {Promise<import('types').Col[]>}
  */
 async function FillCols(schema, table, spCols, getMethod, refresh) {
    const key = spTableKey(schema, table)
@@ -65,7 +65,7 @@ export async function FillBeans(schema, table, refresh = false) {
 /**
  * @param {string} schema
  * @param {string} table
- * @param {import('vue/types').DbRecord} bean
+ * @param {import('types').DbRecord} bean
  * @returns
  */
 export function UpdateBeans(schema, table, bean) {

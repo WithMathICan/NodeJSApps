@@ -9,7 +9,9 @@
     "lint": "eslint . && tsc \"**/*.js\" \"**/*.ts\"",
     "lint-fix": "eslint --fix . ",
     "fmt": "prettier --write \"**/*.js\" \"**/*.ts\"",
-    "dev-sp": "nodemon smart-panel/index"
+    "dev-sp": "nodemon smart-panel/index",
+    "dev-vue": "cd vue && npm run dev",
+    "dev": "concurrently npm:dev-sp npm:dev-vue"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,7 @@
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@types/pg": "^8.6.6",
+    "concurrently": "^7.6.0",
     "eslint": "^8.32.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.27.5",

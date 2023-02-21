@@ -15,5 +15,6 @@
     "strictNullChecks": true,
     "useDefineForClassFields": true
   },
-  "include": ["*", "**/*"]
+  "include": ["*", "**/*"],
+  "exclude": ["vue/**/*"]
 }
