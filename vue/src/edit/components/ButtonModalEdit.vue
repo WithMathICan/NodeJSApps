@@ -22,7 +22,9 @@ import EditForm from '../edit-form/EditForm.vue';
 
 let props = defineProps(['schema', 'table', 'id'])
 
+/** @type {import('vue').Ref} */
 let bean = ref(null)
+/** @type {import('vue').Ref<import('types').Col[]>} */
 let cols = ref([])
 let showDialog = ref(false)
 

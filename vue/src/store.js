@@ -65,7 +65,7 @@ export async function FillBeans(schema, table, refresh = false) {
 /**
  * @param {string} schema
  * @param {string} table
- * @param {import('types').DbRecord} bean
+ * @param {import('types').DbRecord | null} bean
  * @returns
  */
 export function UpdateBeans(schema, table, bean) {

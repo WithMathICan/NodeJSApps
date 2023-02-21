@@ -25,18 +25,20 @@ import EditForm from './edit-form/EditForm.vue';
 import Button from 'primevue/button';
 import { useRouter } from 'vue-router';
 
-/** @type {{schema: string, table: string}} */
+/** @type {{schema: string, table: string}} */ //@ts-ignore
 let props = defineProps(['schema', 'table'])
 
 let router = useRouter()
 
+/** @type {import('vue').Ref} */
 let bean = ref({})
+/** @type {import('vue').Ref<import('types').Col[]>} */
 let cols = ref([])
 function init() {
    api[props.schema][props.table].GetCols().then(ColsObtained)
 }
 
-/** @param {import('../../../sp-server-ts-validation/classes/Col').Col[]} dataCols */
+/** @param {import('types').Col[]} dataCols */
 function ColsObtained(dataCols){
    if (!Array.isArray(dataCols)) return
    cols.value = dataCols

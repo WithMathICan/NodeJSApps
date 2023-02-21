@@ -6,6 +6,7 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
+/** @type {import('vue').Ref} */
 let root = ref(null)
 let gridClass = ref('dynamic-grid grid-1')
 function setGridClass(){
@@ -21,7 +22,7 @@ onUnmounted(() => {
    window.removeEventListener('resize', setGridClass);
 })
 </script>
-
+<!-- 
 <style lang="scss" scoped>
 .dynamic-grid{
    display: grid;
@@ -37,4 +38,4 @@ onUnmounted(() => {
    grid-template-columns: 1fr;
    row-gap: 10px;
 }
-</style>
+</style> -->

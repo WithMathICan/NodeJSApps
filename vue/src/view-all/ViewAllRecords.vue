@@ -5,15 +5,20 @@
          <router-link class="link p-button p-button-warning" :to="{ name: 'new', params: { schema, table } }">Создать</router-link>
          <ButtonDelete :schema="schema" :table="table" :ids="ids" label="Удалить" :delete-cb="clearSelected" />
       </div>
+      <!-- <span class="p-input-icon-left" v-if="filters">
+         <i class="pi pi-search" />
+         <InputText v-model="filters['glob'].value" placeholder="Keyword Search" />
+      </span> -->
       <DataTable responsiveLayout="scroll" :value="spBeans[tableKey]" dataKey="id" :rowHover="true" 
          v-model:filters="filters" filterDisplay="menu" v-model:selection="selectedBeans" :rows="5" :paginator="true"
          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
          :rowsPerPageOptions="[2, 5,10,25,50,100]" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
          stateStorage="session" :stateKey="`dt-state-session-${schema}-${table}`"
+         :globalFilterFields="['title']"
       >
          <template #header>
             <div class="flex justify-content-between align-items-center">
-               <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="filters=createFilters()"/>
+               <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="createFilters()"/>
                <span v-if="selectedBeans.length" class="text-blue-600">{{ selectedBeans.length }} выбрано</span>
             </div>
             <div style="text-align:left" v-if="Array.isArray(spColsData[tableKey])">
@@ -90,8 +95,8 @@ import Button from 'primevue/button';
 // import Row from 'primevue/row';  
 
 /**
-* @param {import('../../../smart-panel/classes/Col').Col} col1
-* @param {import('../../../smart-panel/classes/Col').Col} col2
+* @param {import('types').Col} col1
+* @param {import('types').Col} col2
 */
 function sortCols(col1, col2){
    if (col1.column_name < col2.column_name) return -1
@@ -113,13 +118,14 @@ function clearSelected(deletedIds) {
    selectedBeans.value = selectedBeans.value.filter(el => !deletedIds.includes(el.id))
 }
 
-const filters = ref(createFilters())
+const filters = ref()
 
 function createFilters(){
    let cols = spColsData[tableKey.value]
+   if (!cols) return
    /** @type {any} */
    let filter = {
-      // glob: {value: null, matchMode: FilterMatchMode.CONTAINS},
+      glob: {value: null, matchMode: FilterMatchMode.CONTAINS},
       id: {
          operator: FilterOperator.AND,
          constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS}],
@@ -142,7 +148,7 @@ function createFilters(){
          }
       }
    }
-   return filter
+   filters.value = filter
 }
 
 /** @type {import('vue').Ref<import('types').Col[]>} */
@@ -172,7 +178,10 @@ function setInitialCols(cols){
 function init() {
    console.log('init ViewAllRecords');
    FillBeans(props.schema, props.table)
-   FillColsData(props.schema, props.table).then(setInitialCols)
+   FillColsData(props.schema, props.table).then(cols => {
+      setInitialCols(cols)
+      createFilters()
+   })
 }
 
 onMounted(init)

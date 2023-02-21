@@ -32,10 +32,11 @@ import ButtonDelete from './components/ButtonDelete.vue';
 import { useRouter } from 'vue-router';
 
 
-/** @type {{schema: string, table: string, id: string}} */
+/** @type {{schema: string, table: string, id: string}} */ //@ts-ignore
 let props = defineProps(['schema', 'table', 'id'])
 
-let bean = ref(null)
+let bean = ref()
+/** @type {import('vue').Ref<import('types').Col[]>} */
 let cols = ref([])
 function init() {
    api[props.schema][props.table].GetCols().then(data => cols.value = data ?? [])

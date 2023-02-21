@@ -26,10 +26,12 @@ import EditForm from './edit-form/EditForm.vue';
 import Button from 'primevue/button';
 import { useRouter } from 'vue-router';
 
-/** @type {{schema: string, table: string, id: string}} */
+/** @type {{schema: string, table: string, id: string}} */ //@ts-ignore
 let props = defineProps(['schema', 'table', 'id'])
 
+/** @type {import('vue').Ref} */
 let bean = ref(null)
+/** @type {import('vue').Ref<import('types').Col[]>} */
 let cols = ref([])
 let router = useRouter()
 function init() {
