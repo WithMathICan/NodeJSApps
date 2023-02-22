@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run lint && tsc",
+    "test": "nodemon run.test.js",
     "tsc": "tsc",
     "lint": "eslint . && tsc \"**/*.js\" \"**/*.ts\"",
     "lint-fix": "eslint --fix . ",
