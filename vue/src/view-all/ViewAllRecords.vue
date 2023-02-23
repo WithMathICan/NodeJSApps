@@ -1,14 +1,15 @@
 <template>
+   <span v-if="filters">{{ filters['global'].value }}</span>
    <h1 class="text-700 mb-2">{{ table }} </h1>
    <div v-if="tableKey && Array.isArray(spBeans[tableKey])">
       <div class="mt-2 mb-2">
          <router-link class="link p-button p-button-warning" :to="{ name: 'new', params: { schema, table } }">Создать</router-link>
          <ButtonDelete :schema="schema" :table="table" :ids="ids" label="Удалить" :delete-cb="clearSelected" />
+         <span class="p-input-icon-left" v-if="filters">
+            <i class="pi pi-search" />
+            <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+         </span>
       </div>
-      <!-- <span class="p-input-icon-left" v-if="filters">
-         <i class="pi pi-search" />
-         <InputText v-model="filters['glob'].value" placeholder="Keyword Search" />
-      </span> -->
       <DataTable responsiveLayout="scroll" :value="spBeans[tableKey]" dataKey="id" :rowHover="true" 
          v-model:filters="filters" filterDisplay="menu" v-model:selection="selectedBeans" :rows="5" :paginator="true"
          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
@@ -123,9 +124,9 @@ const filters = ref()
 function createFilters(){
    let cols = spColsData[tableKey.value]
    if (!cols) return
-   /** @type {any} */
+   /** @type {import('primevue/datatable').DataTableFilterMeta} */
    let filter = {
-      glob: {value: null, matchMode: FilterMatchMode.CONTAINS},
+      global: {value: null, matchMode: FilterMatchMode.CONTAINS},
       id: {
          operator: FilterOperator.AND,
          constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS}],

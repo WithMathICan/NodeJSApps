@@ -15,7 +15,7 @@ const toLowerFirstLetter = str => str.charAt(0).toLowerCase() + str.slice(1);
 const kebabToPascalCase = str => str.split('-').map(capitalizeFirstLetter).join('')
 
 /** @type {FStrConvert} */
-const kebabToCamelCase = str => str.split('-').map((s, i) => (i === 0 ? s : capitalizeFirstLetter(s))).join('')
+const kebabToCamelCase = str => toLowerFirstLetter(str.split('-').map(capitalizeFirstLetter).join(''))
 
 /** @type {FStrConvert} */
 const kebabToSnakeCase = str => str.split('-').join('_')
@@ -37,7 +37,7 @@ const camelToSnakeCase = str => str.replace(/[A-Z]/g, letter => `_${letter.toLow
 const snakeToPascalCase = str => str.split('_').map(capitalizeFirstLetter).join('')
 
 /** @type {FStrConvert} */
-const snakeToCamelCase = str => str.split('_').map((s, i) => (i === 0 ? s : capitalizeFirstLetter(s))).join('')
+const snakeToCamelCase = str => toLowerFirstLetter(str.split('_').map(capitalizeFirstLetter).join(''))
 
 /** @type {FStrConvert} */
 const snakeToKebabCase = str => str.split('_').join('-')
