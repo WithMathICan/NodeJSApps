@@ -80,7 +80,10 @@ async function findDbTables(schemas, query) {
    for (const schema of schemas) {
       const sql = 'SELECT table_name FROM information_schema.tables WHERE table_schema = $1'
       const { rows } = await query(sql, [schema])
-      if (rows.length > 0) dbTables[schema] = rows.map(el => el.table_name)
+      if (rows.length > 0) {
+         dbTables[schema] = rows.map(el => el.table_name)
+         dbTables[schema] = dbTables[schema].filter(el => !el.includes('___'))
+      }
    }
    return dbTables
 }

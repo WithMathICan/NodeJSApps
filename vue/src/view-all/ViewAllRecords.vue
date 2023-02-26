@@ -2,9 +2,11 @@
    <span v-if="filters">{{ filters['global'].value }}</span>
    <h1 class="text-700 mb-2">{{ table }} </h1>
    <div v-if="tableKey && Array.isArray(spBeans[tableKey])">
-      <div class="mt-2 mb-2">
-         <router-link class="link p-button p-button-warning" :to="{ name: 'new', params: { schema, table } }">Создать</router-link>
-         <ButtonDelete :schema="schema" :table="table" :ids="ids" label="Удалить" :delete-cb="clearSelected" />
+      <div class="mt-2 mb-2 flex justify-content-between align-items-center">
+         <div>
+            <router-link class="link p-button p-button-warning" :to="{ name: 'new', params: { schema, table } }">Создать</router-link>
+            <ButtonDelete :schema="schema" :table="table" :ids="ids" label="Удалить" :delete-cb="clearSelected" />
+         </div>
          <span class="p-input-icon-left" v-if="filters">
             <i class="pi pi-search" />
             <InputText v-model="filters['global'].value" placeholder="Keyword Search" />

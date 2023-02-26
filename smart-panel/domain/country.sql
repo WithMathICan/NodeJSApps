@@ -40,12 +40,11 @@ CREATE TABLE country.tags(
     alias VARCHAR(50) NOT NULL,
     PRIMARY KEY(id)
 );
--- ALTER TABLE country.tags ADD CONSTRAINT country_tags_unique_alias UNIQUE (alias);
 CREATE UNIQUE INDEX country_tags_unique_alias ON country.tags(alias);
 
 CREATE TABLE country.city___tags(
     city_id INTEGER,
     tag_alias VARCHAR(50),
     PRIMARY KEY (city_id, tag_alias)
-)
+);
 
