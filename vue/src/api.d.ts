@@ -2,9 +2,10 @@ import {DbRecord, Col} from 'types'
 
 export interface ISpApi {
    GetCols() : Promise<Col[]>
-   GetBean(id: string, fields = ['*']): Promise<DbRecord | null>
+   GetBean(id: string, fields = ['*']): Promise<DbRecord>
    GetBeans(fields = ['*']): Promise<DbRecord[]>
-   SaveBean(record: DbRecord): Promise<DbRecord | null>
+   InsertBean(record: DbRecord): Promise<DbRecord | null>
+   UpdateBean(id: string, record: DbRecord): Promise<DbRecord>
    RemoveBeans(ids: string[]): Promise<string[]>
 }
 
