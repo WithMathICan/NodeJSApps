@@ -18,7 +18,7 @@
                return result
             },
             insert: bean => crud.insert(bean),
-            update: bean => crud.update(bean.id, bean),
+            update: (id, bean) => crud.update(id, bean),
             bean: (id, fields = ['*']) => crud.findById(id, fields),
             beans: (fields = ['*']) => crud.queryAll(`select ${fields.join(',')} from ${crud.tableName} order by id desc`),
             removeMany: (ids) => crud.removeMany(ids)

@@ -9,7 +9,7 @@ export interface ISpModel {
    bean(id: string, fields = ['*']): Promise<DbRecord | null>
    beans(fields = ['*']): Promise<DbRecord[]>
    insert(record: DbRecord): Promise<DbRecord | null>
-   update(record: DbRecord): Promise<DbRecord | null>
+   update(id: string, record: DbRecord): Promise<DbRecord | null>
    removeMany(ids: string[]): Promise<string[]>
 }
 

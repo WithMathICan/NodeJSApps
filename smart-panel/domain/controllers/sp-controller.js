@@ -38,8 +38,8 @@
       }
 
       /** @param {import('common/types').DbRecord} record */
-      const update = async (record) => {
-         const result = await model.update(record)
+      const update = async ({id, bean}) => {
+         const result = await model.update(id, bean)
          if (result) return { statusCode: 200, message: 'OK', result }
          else return { statusCode: 400, message: 'Can not update record', result }
       }
