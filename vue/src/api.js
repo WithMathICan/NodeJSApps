@@ -30,6 +30,7 @@ const post = async (url, body = '') => {
    } catch (/** @type {any} */ e) {
       // console.log(e);
       showMessage(e.message, 15000, 'error')
+      throw e
    } finally {
       loading.value = false
    }
@@ -47,12 +48,10 @@ export function CreateApi(tables, API_PATH) {
          api[schema][table] = {
             GetCols: () => post(`${API_PATH}/${schema}/${table}/cols`),
             GetBeans: () => post(`${API_PATH}/${schema}/${table}/beans`),
-            GetBean: (id) => post(`${API_PATH}/${schema}/${table}/bean`, { id }),
-            SaveBean: (bean) => {
-               if ('id' in bean) return post(`${API_PATH}/${schema}/${table}/update`, bean)
-               else return post(`${API_PATH}/${schema}/${table}/insert`, bean)
-            },
-            RemoveBeans: (ids) => post(`${API_PATH}/${schema}/${table}/remove-many`, { ids }),
+            GetBean: id => post(`${API_PATH}/${schema}/${table}/bean`, { id }),
+            InsertBean: bean => post(`${API_PATH}/${schema}/${table}/insert`, bean),
+            UpdateBean: (id, bean) =>  post(`${API_PATH}/${schema}/${table}/update`, {id, bean}),
+            RemoveBeans: ids => post(`${API_PATH}/${schema}/${table}/remove-many`, { ids }),
          }
       }
    }
