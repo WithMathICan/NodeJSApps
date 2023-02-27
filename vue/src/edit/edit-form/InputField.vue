@@ -14,7 +14,6 @@
 <div v-else-if="col.data_type === 'fk'">
    <InputFk :bean="bean" :col="col"></InputFk>
 </div>
-
 </template>
 
 <script setup>
@@ -26,11 +25,8 @@ import InputFk from './InputFk.vue'
 /* @type {{bean: any, col: import('vue/types').Col}} */
 let props = defineProps(['bean', 'col']) 
 
-
 if (props.col.data_type === 'date') {
    let date = Date.parse(props.bean[props.col.column_name])
    props.bean[props.col.column_name] = date ? new Date(date) : new Date()
 }
-
-
 </script>
