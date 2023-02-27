@@ -19,8 +19,9 @@
       /** @param {{id: string, fields: string[]}} args */
       const bean = async ({ id, fields = ['*'] }) => {
          const result = await model.bean(id, fields)
-         if (result) return { statusCode: 200, message: 'OK', result }
-         else return { statusCode: 404, message: 'Bean not found', result }
+         if (!result) return { statusCode: 404, message: 'Bean not found', result }
+         delete result['id']
+         return { statusCode: 200, message: 'OK', result }
       }
 
       /** @param {{fields: string[]}} args */
