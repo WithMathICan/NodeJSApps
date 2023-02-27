@@ -28,3 +28,9 @@ export interface country_city{
    updated_at: Date
 }
 
+export interface country_tags{
+   id: number
+   title: string
+   alias: string
+}
+

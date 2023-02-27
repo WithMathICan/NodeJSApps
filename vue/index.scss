@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap'); 
+*, *::after, *::before{
+   margin: 0;
+   padding: 0;
+}
+body, .p-component{
+   font-family: 'Roboto', sans-serif;
+}
+@import 'primeflex/primeflex.scss';
+
+// .p-multiselect-label{
+//    text-overflow: unset!important;
+// }
+
+.p-multiselect-label {
+	white-space: break-spaces!important;
+	overflow: auto!important;
+}
+

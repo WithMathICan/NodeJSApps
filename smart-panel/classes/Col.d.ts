@@ -25,7 +25,7 @@ export class Col{
    ordinal_position: number
    column_default: any
    data_type: TColType
-   fk?: Fk
+   fk: Fk
 
    constructor(col_data: IDbCol)
 }

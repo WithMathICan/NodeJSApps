@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run lint && tsc",
+    "test": "nodemon run.test.js",
     "tsc": "tsc",
     "lint": "eslint . && tsc \"**/*.js\" \"**/*.ts\"",
     "lint-fix": "eslint --fix . ",
-    "fmt": "prettier --write \"**/*.js\" \"**/*.ts\""
+    "fmt": "prettier --write \"**/*.js\" \"**/*.ts\"",
+    "dev-sp": "nodemon smart-panel/index",
+    "dev-vue": "cd vue && npm run dev",
+    "dev-c": "concurrently npm:dev-sp npm:dev-vue",
+    "dev": "run-p dev-sp dev-vue"
   },
   "keywords": [],
   "author": "",
@@ -16,10 +20,12 @@
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@types/pg": "^8.6.6",
+    "concurrently": "^7.6.0",
     "eslint": "^8.32.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.8.3",
     "typescript": "^4.9.4"
   },

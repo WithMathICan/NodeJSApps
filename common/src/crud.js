@@ -4,30 +4,38 @@
  * @type {import("./crud").FCreateCRUD}
  * @param {string} schema
  * @param {string} table
- * @param {import('pg').PoolClient} pgClient
+ * @param {import('./crud').FQuery} query
+ * @returns {import('./crud').ICrud}
  */
-const createCRUD = (schema, table, pgClient) => ({
-   tableName: `${schema}.${table}`,
+const createCRUD = (schema, table, query) => {
+   const tableName = `${schema}.${table}`
 
-   query(sql, arr = []) {
-      return pgClient.query(sql, arr)
-   },
+   /**
+    * @param {string} sql
+    * @param {any[]} arr
+    * @returns {Promise<import('./crud').DbRecord[]>}
+    */
+   const queryAll = async (sql, arr = []) => (await query(sql, arr)).rows
 
-   async queryAll(sql, arr = []) {
-      const { rows } = await pgClient.query(sql, arr)
-      return rows
-   },
+   /**
+    * @param {string} sql
+    * @param {any[]} arr
+    * @returns {Promise<import('./crud').DbRecord>}
+    */
+   const queryFirst = async (sql, arr = []) => (await query(sql, arr)).rows[0]
 
-   async queryFirst(sql, arr = []) {
-      const { rows } = await pgClient.query(sql, arr)
-      return rows[0]
-   },
+   /**
+    * @param {string} id
+    * @param {string[]} fields
+    * @returns {Promise<import('./crud').DbRecord>}
+    */
+   const findById = (id, fields) => queryFirst(`select ${fields.join(',')} from ${tableName} where id=$1`, [id])
 
-   findById(id, fields) {
-      return this.queryFirst(`select ${fields.join(',')} from ${this.tableName} where id=$1`, [id])
-   },
-
-   insert({ ...record }) {
+   /**
+    * @param {import('./crud').DbRecord} record
+    * @returns {Promise<import('./crud').DbRecord>}
+    */
+   const insert = ({ ...record }) => {
       delete record.id
       const fields = []
       const nums = []
@@ -38,11 +46,16 @@ const createCRUD = (schema, table, pgClient) => ({
          nums.push(`$${i++}`)
          args.push(record[key])
       }
-      const sql = `INSERT INTO ${this.tableName} (${fields.join(',')}) VALUES (${nums.join(',')}) RETURNING *`
-      return this.queryFirst(sql, args)
-   },
+      const sql = `INSERT INTO ${tableName} (${fields.join(',')}) VALUES (${nums.join(',')}) RETURNING *`
+      return queryFirst(sql, args)
+   }
 
-   update(id, { ...record }) {
+   /**
+    * @param {string} id
+    * @param {import('./crud').DbRecord} record
+    * @returns {Promise<import('./crud').DbRecord>}
+    */
+   const update = (id, { ...record }) => {
       delete record.id
       const delta = []
       let i = 1
@@ -51,17 +64,26 @@ const createCRUD = (schema, table, pgClient) => ({
          delta.push(`${key}=$${i++}`)
          args.push(record[key])
       }
-      const sql = `UPDATE ${this.tableName} SET ${delta.join(',')} WHERE id=$${i} RETURNING *`
+      const sql = `UPDATE ${tableName} SET ${delta.join(',')} WHERE id=$${i} RETURNING *`
       args.push(id)
-      return this.queryFirst(sql, args)
-   },
+      return queryFirst(sql, args)
+   }
 
-   async removeMany(ids) {
-      const nums = ids.map((v, i) => `$${i + 1}`);
-      const sql = `DELETE FROM ${this.tableName} WHERE id in (${nums.join(',')}) returning id`
-      const { rows } = await pgClient.query(sql, ids)
+   /**
+    * @param {string[]} ids
+    * @returns {Promise<string[]>}
+    */
+   const removeMany = async (ids) => {
+      const nums = ids.map((_, i) => `$${i + 1}`);
+      const sql = `DELETE FROM ${tableName} WHERE id in (${nums.join(',')}) returning id`
+      const { rows } = await query(sql, ids)
       return rows.map(el => el.id)
    }
-})
+
+   /** @type {import('./crud').ICrud} */
+   const obj = { tableName, query, queryAll, queryFirst, insert, update, removeMany, findById }
+
+   return Object.freeze(obj)
+}
 
 module.exports = { createCRUD }

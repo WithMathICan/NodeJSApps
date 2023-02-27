@@ -1,16 +1,16 @@
 'use strict'
 
-const { createCols, spFindDbTables } = require('./sp-functions.js')
+const { createCols, findDbTables } = require('./sp-functions.js')
 const fs = require('node:fs')
 const path = require('node:path')
 
 /**
  * @param {string[]} dbSchemas
  * @param {string} database
- * @param {import('pg').Pool} pgClient
- * @param {string} dbDir
+ * @param {import('common/types').FQuery} query
+ * @param {string} domainDir
  */
-async function createInterfaces(dbSchemas, database, pgClient, dbDir) {
+async function createInterfaces(dbSchemas, database, query, domainDir) {
    /**
     * @param {string} schema
     * @param {string} table
@@ -18,7 +18,7 @@ async function createInterfaces(dbSchemas, database, pgClient, dbDir) {
     */
    async function createInterfaceByCols(schema, table) {
       /** @type {import('../classes/Col').Col[]} */
-      const cols = await createCols(schema, table, database, pgClient)
+      const cols = await createCols(schema, table, database, query)
       let str = `export interface ${schema}_${table}{\n`
       for (const col of cols) {
          const dataType = col.data_type === 'date' ? 'Date' :
@@ -32,16 +32,14 @@ async function createInterfaces(dbSchemas, database, pgClient, dbDir) {
    }
 
    /** @type {Record<string, string[]>} */
-   const dbTables = await spFindDbTables(dbSchemas, pgClient)
+   const dbTables = await findDbTables(dbSchemas, query)
    for (const schema in dbTables) {
       let interfaces = ''
       for (const table of dbTables[schema]) {
          interfaces += await createInterfaceByCols(schema, table) + '\n'
       }
-      await fs.promises.writeFile(path.join(dbDir, `${schema}.ts`), interfaces)
+      await fs.promises.writeFile(path.join(domainDir, `${schema}.ts`), interfaces)
    }
 }
-
-
 
 module.exports = { createInterfaces }
