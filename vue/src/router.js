@@ -1,7 +1,7 @@
 import ViewAllRecords from './view-all/ViewAllRecords.vue'
-import EditRecord from './edit/EditRecord.vue'
+import UpdateRecord from './edit/UpdateRecord.vue'
 import CopyRecord from './edit/CopyRecord.vue'
-import CreateRecord from './edit/CreateRecord.vue'
+import InsertRecord from './edit/InsertRecord.vue'
 import Main from './Main.vue'
 import NotFound from './NotFound.vue'
 
@@ -21,7 +21,7 @@ export function CreateRoutes(tables) {
    routes.push({
       path: `/:schema/:table/edit/:id`,
       name: 'edit',
-      component: EditRecord,
+      component: UpdateRecord,
       props: true,
    })
    routes.push({
@@ -33,7 +33,7 @@ export function CreateRoutes(tables) {
    routes.push({
       path: `/:schema/:table/new`,
       name: 'new',
-      component: CreateRecord,
+      component: InsertRecord,
       props: true,
    })
    routes.push({

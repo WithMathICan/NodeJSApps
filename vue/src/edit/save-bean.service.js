@@ -23,7 +23,7 @@ export const createSaveData = (props, actionType) =>  {
    let cols = ref([])
    const isBeanChanged = ref(false)
 
-   watch(() => bean, () => {isBeanChanged.value = true; console.log('Watch bean')}, {deep: true})
+   watch(() => bean, () => isBeanChanged.value = true, {deep: true})
 
    const init = async () => {
       cols.value = await api[props.schema][props.table].GetCols()
@@ -34,7 +34,7 @@ export const createSaveData = (props, actionType) =>  {
    }
    
    const save = () => new Promise(resolve => {
-      const afterSave = data => {
+      const afterSave = (/** @type {import("../../../common/types").DbRecord | null} */ data) => {
          isBeanChanged.value = false
          if (data && data.id){
             UpdateBeans(props.schema, props.table, data)
