@@ -1,7 +1,7 @@
 'use strict'
 
 const fs = require('node:fs')
-const { load, createCRUD, slugify, kebabToCamelCase  } = require('../../common')
+const { load, createCRUD, slugify, kebabToCamelCase } = require('../../common')
 const { findDbTables, createCols } = require('./sp-functions')
 
 const HEADERS = {

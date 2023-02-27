@@ -13,15 +13,15 @@
          </span>
       </div>
       <DataTable responsiveLayout="scroll" :value="spBeans[tableKey]" dataKey="id" :rowHover="true" 
-         v-model:filters="filters" filterDisplay="menu" v-model:selection="selectedBeans" :rows="5" :paginator="true"
+         v-model:filters="filters" filterDisplay="menu" v-model:selection="selectedBeans" :rows="10" :paginator="true"
          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-         :rowsPerPageOptions="[2, 5,10,25,50,100]" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+         :rowsPerPageOptions="[2,5,10,25,50,100,500]" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
          stateStorage="session" :stateKey="`dt-state-session-${schema}-${table}`"
          :globalFilterFields="['title']"
       >
          <template #header>
-            <div class="flex justify-content-between align-items-center">
-               <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="createFilters()"/>
+            <div class="flex justify-content-between align-items-center mb-2">
+               <Button type="button" icon="pi pi-filter-slash" class="p-button-outlined" @click="createFilters()"/>
                <span v-if="selectedBeans.length" class="text-blue-600">{{ selectedBeans.length }} выбрано</span>
             </div>
             <div style="text-align:left" v-if="Array.isArray(spColsData[tableKey])">
