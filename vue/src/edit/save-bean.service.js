@@ -1,5 +1,5 @@
 import { UpdateBeans } from '../store'
-import {reactive, ref, watch, watchEffect} from 'vue'
+import {ref, watch} from 'vue'
 import {api} from '../api'
 
 /** @param {import('../../../smart-panel/classes/Col').Col[]} colsData */
@@ -43,6 +43,7 @@ export const createSaveData = (props, actionType) =>  {
             resolve(data)
          }
       }
+      
       if (actionType === 'copy' || actionType === 'insert'){
          api[props.schema][props.table].InsertBean(bean.value).then(afterSave)
       }
@@ -52,5 +53,4 @@ export const createSaveData = (props, actionType) =>  {
    })
 
    return {bean, cols, save, init, isBeanChanged}
-   
 }
