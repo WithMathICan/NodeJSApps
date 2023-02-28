@@ -29,7 +29,6 @@ export const createSaveData = (props, actionType) =>  {
       cols.value = await api[props.schema][props.table].GetCols()
       if (actionType === 'insert') bean.value = findBean0(cols.value)
       else if ((actionType === 'copy' || actionType === 'update') && props.id !== undefined){
-         console.log('bean');
          bean.value = await api[props.schema][props.table].GetBean(props.id)
       }
    }
