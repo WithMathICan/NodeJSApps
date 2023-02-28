@@ -30,7 +30,10 @@ async function start() {
       CreateApi(result, API_PATH)
       const routes = CreateRoutes(result)
       const router = createRouter({ history: createWebHistory(), routes })
-      router.beforeEach(() => ClearMessages())
+      router.beforeEach(() => {
+         //console.log({to, from});
+         ClearMessages()
+      })
       createApp(App).use(PrimeVue).use(ConfirmationService).use(router).mount('#root')
    } catch (e) {
       console.log(e);

@@ -179,7 +179,6 @@ function setInitialCols(cols){
 }
 
 function init() {
-   console.log('init ViewAllRecords');
    FillBeans(props.schema, props.table)
    FillColsData(props.schema, props.table).then(cols => {
       setInitialCols(cols)

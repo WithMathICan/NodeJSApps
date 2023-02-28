@@ -1,10 +1,9 @@
 <template>
-   <h2 class="font-normal text-blue-500">Копирование записи</h2>
+   <h2 class="font-normal text-green-500">Создание записи</h2>
    <EditComponent
-      action-type="copy"
+      action-type="insert"
       :bean="bean"
       :cols="cols"
-      :id="id"
       :on-submit="onSubmit"
       :schema="schema"
       :table="table"
@@ -18,13 +17,13 @@ import { useRouter } from 'vue-router';
 import {createSaveData} from './save-bean.service'
 import EditComponent from './components/EditComponent.vue';
 
-/** @type {{schema: string, table: string, id: string}} */ //@ts-ignore
-let props = defineProps(['schema', 'table', 'id'])
+/** @type {{schema: string, table: string}} */ //@ts-ignore
+let props = defineProps(['schema', 'table'])
 let router = useRouter()
-let {bean, cols, init, save, isBeanChanged} = createSaveData(props, 'copy')
+let {bean, cols, init, save, isBeanChanged} = createSaveData(props, 'insert')
 
-onMounted(init)
-watch(() => [props.schema, props.table, props.id], init)
+onMounted(() => init().then(() => isBeanChanged.value = false))
+watch(() => [props.schema, props.table], init)
 function onSubmit(){
    save().then(data => router.push({name: 'edit', params: {...props, id: data.id}}))
 }
