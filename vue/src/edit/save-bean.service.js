@@ -3,7 +3,7 @@ import {ref, watch} from 'vue'
 import {api} from '../api'
 
 /** @param {import('../../../smart-panel/classes/Col').Col[]} colsData */
-async function findBean0(colsData){
+function findBean0(colsData){
    /** @type {import('../../../common/types').DbRecord} */ let record = {};
    for (let col of colsData) if (col.column_default !== null) {
       if (col.data_type === 'date'){
@@ -14,6 +14,7 @@ async function findBean0(colsData){
       else if (col.data_type === 'number') record[col.column_name] = +col.column_default 
       else record[col.column_name] = col.column_default
    }
+   return record
 }
 
 /** @type {import('./save-bean.service').FCreateSaveData} */
