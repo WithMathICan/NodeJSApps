@@ -48,6 +48,7 @@
                <ColDate v-else-if="col.data_type === 'date'" :bean="slotProps.data" :col="col" />
                <ColNumber v-else-if="col.data_type === 'number'" :bean="slotProps.data" :col="col" />
                <ColString v-else-if="col.data_type === 'varchar'" :data="slotProps.data[col.column_name]?.substring(0, 150)" />
+               <ColM2M v-if="col.data_type === 'm2m'" :col="col" :bean="slotProps.data"></ColM2M>
             </template>
             <template #filter="{filterModel}">
                <Calendar v-if="col.data_type === 'date'" v-model="filterModel.value" dateFormat="dd-mm-yy" placeholder="dd-mm-yyyy" />
@@ -95,6 +96,7 @@ import Calendar from 'primevue/calendar';
 import InputNumber from 'primevue/inputnumber';
 import MultiSelect from 'primevue/multiselect';  
 import Button from 'primevue/button';
+import ColM2M from './cols/ColM2M.vue';
 // import Row from 'primevue/row';  
 
 /**

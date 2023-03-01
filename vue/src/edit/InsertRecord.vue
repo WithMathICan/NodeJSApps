@@ -1,6 +1,5 @@
 <template>
    <h2 class="font-normal text-green-500">Создание записи</h2>
-   {{ bean }}
    <EditComponent
       action-type="insert"
       :bean="bean"

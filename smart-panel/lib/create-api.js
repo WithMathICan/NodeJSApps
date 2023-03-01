@@ -3,6 +3,7 @@
 const fs = require('node:fs')
 const { load, createCRUD, slugify, kebabToCamelCase } = require('../../common')
 const { findDbTables, createCols } = require('./sp-functions')
+const { M2M } = require('../classes/M2M.js')
 
 const HEADERS = {
    'X-XSS-Protection': '1; mode=block',
@@ -32,8 +33,9 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
          console: Object.freeze(console),
          sp: Object.freeze({ createCRUD, PG_DATABASE, createCols }),
       })
-      const modelSrc = fs.readFileSync(domainDir + '/models/sp-model.js', { encoding: 'utf-8' })
-      const { createSpModel } = load(modelSrc, sandbox)
+      const modelFilename = domainDir + '/models/sp-model.js'
+      const modelSrc = fs.readFileSync(modelFilename, { encoding: 'utf-8' })
+      const { createSpModel } = load(modelSrc, sandbox, modelFilename)
       console.log(createSpModel);
       return createSpModel
    }
@@ -44,17 +46,17 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
       const createSpModel = loadSpModel()
       const sandbox = Object.freeze({
          console: Object.freeze(console),
-         sp: Object.freeze({ createSpModel, slugify }),
+         sp: Object.freeze({ createSpModel, slugify, M2M }),
       })
       for (const schema in dbTables) {
          for (const table of dbTables[schema]) {
             const key = `${schema}.${table}`
             let src = `sp.createSpModel('${schema}', '${table}');`
-            const fileSrc = domainDir + `/models/${schema}/${table}.js`
+            let fileSrc = domainDir + `/models/${schema}/${table}.js`
             if (fs.existsSync(fileSrc)) {
                src = fs.readFileSync(fileSrc, { encoding: 'utf-8' })
-            }
-            const model = load(src, sandbox)
+            } else fileSrc = domainDir + '/models/sp-model.js'
+            const model = load(src, sandbox, fileSrc)
             models[key] = model
          }
       }
@@ -67,8 +69,9 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
          console: Object.freeze(console),
          sp: Object.freeze({ models, createCRUD, poolQuery }),
       })
+      const controllerFile = domainDir + '/controllers/sp-controller.js'
       const controllerSrc = fs.readFileSync(domainDir + '/controllers/sp-controller.js', { encoding: 'utf-8' })
-      const { createSpController } = load(controllerSrc, sandbox)
+      const { createSpController } = load(controllerSrc, sandbox, controllerFile)
       return createSpController
    }
 
@@ -83,10 +86,11 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
          console: Object.freeze(console),
          sp: Object.freeze({  })
       })
+      const controllerFile = domainDir + '/controllers/sp-controller.js'
       for (const schema in dbTables) {
          controllers[schema] = {}
          for (const table of dbTables[schema]) {
-            controllers[schema][table] = load(`createSpController('${schema}', '${table}');`, sandbox)
+            controllers[schema][table] = load(`createSpController('${schema}', '${table}');`, sandbox, controllerFile)
          }
       }
       return controllers
