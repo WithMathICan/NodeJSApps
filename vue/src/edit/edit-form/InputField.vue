@@ -14,6 +14,9 @@
 <div v-else-if="col.data_type === 'fk'">
    <InputFk :bean="bean" :col="col"></InputFk>
 </div>
+<div v-else-if="col.data_type === 'm2m'">
+   <InputM2M :bean="bean" :col="col"></InputM2M>
+</div>
 </template>
 
 <script setup>
@@ -21,8 +24,8 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import Calendar from 'primevue/calendar';
 import InputFk from './InputFk.vue'
+import InputM2M from './InputM2M.vue';
 
-/* @type {{bean: any, col: import('vue/types').Col}} */
 let props = defineProps(['bean', 'col']) 
 
 if (props.col.data_type === 'date') {

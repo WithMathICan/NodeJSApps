@@ -11,10 +11,13 @@ class Col {
    /** @type {number} */ ordinal_position
    /** @type {any} */ column_default
    /** @type {import('./Col').TColType} */ data_type
+   /** @type {boolean} */ is_array
    /** @type {import('./Fk').Fk | undefined} */ fk
+   /** @type {import('./M2M').M2M | undefined} */ m2m
 
    /** @param {import('./Col').IDbCol} col_data */
    constructor(col_data) {
+      // console.log({col_data});
       this.table_catalog = col_data.table_catalog
       this.table_schema = col_data.table_schema
       this.table_name = col_data.table_name
@@ -24,6 +27,7 @@ class Col {
       this.ordinal_position = col_data.ordinal_position
       this.column_default = col_data.column_default
       this.data_type = defineDataType(col_data)
+      this.is_array = col_data.data_type === 'ARRAY'
    }
 }
 

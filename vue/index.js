@@ -10,14 +10,23 @@ import './index.scss'
 // -------------------------------------- JS
 import { createApp } from 'vue';
 import App from './src/App.vue';
-import PrimeVue from 'primevue/config';
-import ConfirmationService from 'primevue/confirmationservice';
 import { CreateMenuItems } from './src/menu-items';
 import { API_PATH } from './config'
 import { createRouter, createWebHistory } from 'vue-router'
 import { CreateRoutes } from './src/router';
 import { CreateApi } from './src/api';
 import { ClearMessages } from './src/messages'
+
+import PrimeVue from 'primevue/config';
+import ConfirmationService from 'primevue/confirmationservice';
+
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Calendar from 'primevue/calendar';
+import MultiSelect from 'primevue/multiselect';
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
+import InputNumber from 'primevue/inputnumber';
 
 async function start() {
    try {
@@ -33,11 +42,22 @@ async function start() {
       router.beforeEach(() => {
          //console.log({to, from});
          ClearMessages()
+      }
+      const app = createApp(App)
+      app.use(PrimeVue);
+      app.use(ConfirmationService);
+      app.use(router);
+      [DataTable, Column, Calendar, MultiSelect, Button, InputText, InputNumber].forEach(el => {
+         app.component(el.name, el)
       })
-      createApp(App).use(PrimeVue).use(ConfirmationService).use(router).mount('#root')
+      app.mount('#root');
    } catch (e) {
       console.log(e);
    }
 }
 
 start()
+
+
+
+

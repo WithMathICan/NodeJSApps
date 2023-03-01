@@ -17,6 +17,11 @@ export interface country_region{
    updated_at: Date
 }
 
+export interface country_tags{
+   id: number
+   title: string
+}
+
 export interface country_city{
    id: number
    title: string
@@ -26,11 +31,6 @@ export interface country_city{
    region_id: string
    created_at: Date
    updated_at: Date
-}
-
-export interface country_tags{
-   id: number
-   title: string
-   alias: string
+   tags: number
 }
 

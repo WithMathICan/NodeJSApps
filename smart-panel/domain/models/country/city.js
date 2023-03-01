@@ -15,9 +15,21 @@
       /** @type {import("../sp-model").ISpModel} */
       const modelObj = {
          ...baseModel,
-         async update(record) {
+         async cols() {
+            /** @type {import('../../../classes/Col').Col[]} */
+            const cols = await baseModel.cols()
+            // console.log(cols);
+            const col = cols.find(el => el.column_name === 'tags')
+            if (col) {
+               col.m2m = new sp.M2M('tags', 'title', 'city___tags')
+               // eslint-disable-next-line camelcase
+               col.data_type = 'm2m'
+            }
+            return cols
+         },
+         async update(id, record) {
             beforeSave(record);
-            return baseModel.update(record);
+            return baseModel.update(id, record);
          },
          async insert(record) {
             beforeSave(record);
