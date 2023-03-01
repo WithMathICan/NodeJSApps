@@ -10,7 +10,12 @@ export default defineComponent({
 
    /** @param {{bean: any, col: import('types').Col}} props */
    setup({bean, col}){
-      onMounted(() => bean[col.column_name] = +bean[col.column_name])
+      function setNumber(){
+         // if (bean[col.column_name]){
+            bean[col.column_name] = +bean[col.column_name]
+         // }
+      }
+      onMounted(setNumber)
    }
 })
 </script>

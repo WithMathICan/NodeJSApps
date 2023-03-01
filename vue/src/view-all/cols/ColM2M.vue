@@ -11,14 +11,13 @@ export default defineComponent({
    /** @param {{col: import('types').Col, bean: any}} props */ //@ts-ignore
    setup(props){
       onMounted(() => {
-         console.log({props})
          FillBeans(props.col.table_schema, props.col.m2m.table)
       })
       
-      let key = spTableKey(props.col.table_schema, props.col.m2m.table)
+      let key = computed(() => props.col.m2m ? spTableKey(props.col.table_schema, props.col.m2m.table) : '')
       const data = computed(() => {
-         if (Array.isArray(spBeans[key])) {
-            return spBeans[key]
+         if (props.col && props.col.m2m && props.bean[props.col.column_name] && Array.isArray(spBeans[key.value])) {
+            return spBeans[key.value]
                .filter(el => props.bean[props.col.column_name].includes(el.id))
                .map(el => el[props.col.m2m.title_column])
                .join(',')
