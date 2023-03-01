@@ -40,9 +40,8 @@ async function start() {
       const routes = CreateRoutes(result)
       const router = createRouter({ history: createWebHistory(), routes })
       router.beforeEach(() => {
-         //console.log({to, from});
          ClearMessages()
-      }
+      })
       const app = createApp(App)
       app.use(PrimeVue);
       app.use(ConfirmationService);
