@@ -32,5 +32,6 @@ export interface country_city{
    created_at: Date
    updated_at: Date
    tags: number
+   img: string
 }
 

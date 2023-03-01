@@ -6,6 +6,7 @@ export interface IConfig {
    PORT: number
    SP_NAME: string
    RPOJECT_ROOT: string
+   UPLOADS_DIR: string
 }
 
 export const config: IConfig
