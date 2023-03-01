@@ -42,7 +42,7 @@ async function start() {
       router.beforeEach(() => {
          //console.log({to, from});
          ClearMessages()
-      })
+      }
       const app = createApp(App)
       app.use(PrimeVue);
       app.use(ConfirmationService);
