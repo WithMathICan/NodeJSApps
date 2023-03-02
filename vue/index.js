@@ -27,6 +27,8 @@ import MultiSelect from 'primevue/multiselect';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
+import Card from 'primevue/card'
+
 
 async function start() {
    try {
@@ -46,7 +48,7 @@ async function start() {
       app.use(PrimeVue);
       app.use(ConfirmationService);
       app.use(router);
-      [DataTable, Column, Calendar, MultiSelect, Button, InputText, InputNumber].forEach(el => {
+      [DataTable, Column, Calendar, MultiSelect, Button, InputText, InputNumber, Card].forEach(el => {
          app.component(el.name, el)
       })
       app.mount('#root');

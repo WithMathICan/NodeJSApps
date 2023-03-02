@@ -17,6 +17,9 @@
 <div v-else-if="col.data_type === 'm2m'">
    <InputM2M :bean="bean" :col="col"></InputM2M>
 </div>
+<div v-else-if="col.data_type === 'file'">
+   <InputFile :bean="bean" :col="col"></InputFile>
+</div>
 </template>
 
 <script setup>
@@ -25,6 +28,7 @@ import InputNumber from 'primevue/inputnumber'
 import Calendar from 'primevue/calendar';
 import InputFk from './InputFk.vue'
 import InputM2M from './InputM2M.vue';
+import InputFile from './InputFile.vue';
 
 let props = defineProps(['bean', 'col']) 
 
