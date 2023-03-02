@@ -9,14 +9,14 @@
 
       </template>
    </Card> -->
-   <FileUpload name="demo[]" :url="uploadUrl" @upload="onAdvancedUpload($event)" :multiple="true" accept="image/*"
+   <!-- <FileUpload name="demo[]" :url="uploadUrl" @upload="onAdvancedUpload($event)" :multiple="true" accept="image/*"
       :maxFileSize="1000000">
       <template #empty>
          <p>Drag and drop files to here to upload.</p>
       </template>
-   </FileUpload>
+   </FileUpload> -->
 
-   <FileUpload name="demo[]" :customUpload="true" @uploader="myUploader" :multiple="false" accept="image/*"
+   <FileUpload :customUpload="true" @uploader="myUploader" :multiple="false"
       :maxFileSize="1000000">
       <template #empty>
          <p>Drag and drop files to here to upload.</p>
@@ -30,10 +30,12 @@ import { API_PATH } from '../../../config'
 
 /** @type {{bean: any, col: import('types').Col}} */ // @ts-ignore
 let props = defineProps(['bean', 'col'])
-const uploadUrl = `${API_PATH}/${props.col.table_schema}/${props.col.table_name}/upload-file`
-function onAdvancedUpload(e) {
-   console.log(e);
-}
+const urlToUpload = (fileName, fileType, lastModified, size) => 
+   `${API_PATH}/upload?schema=${props.col.table_schema}&table=${props.col.table_name}` +
+   `&fileName=${fileName}&fileType=${fileType}&lastModified=${lastModified}&size=${size}`
+// function onAdvancedUpload(e) {
+//    console.log(e);
+// }
 async function myUploader(e) {
    console.log(e);
    const file = e.files[0]; 
@@ -45,7 +47,8 @@ async function myUploader(e) {
       let res = await fetch(file.objectURL)
       let blob = await res.blob()
       console.log(blob)
-      fetch(uploadUrl, {body: file, method: 'PUT'})
+      const url = urlToUpload(file.name, file.type, file.lastModified, file.size)
+      fetch(url, {body: file, method: 'POST'})
    } catch (e) {
       console.log(e);
    }
