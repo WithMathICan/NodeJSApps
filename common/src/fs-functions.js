@@ -9,4 +9,9 @@ const isFileExist = (/** @type {fs.PathLike} */ file) => new Promise(resolve => 
    })
 })
 
-module.exports = { isFileExist }
+const findExtension = (/** @type {string} */ str) => {
+   const arr = str.split('.')
+   return arr[arr.length - 1]
+}
+
+module.exports = { isFileExist, findExtension }

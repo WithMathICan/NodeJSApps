@@ -141,14 +141,14 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
  * @param {string} domainDir
  * @param {string} SP_NAME
  * @param {string} UPLOADS_DIR
- *
+ * @param {string} UPLOADS_SETTINGS_TABLE
  */
-function createUploadRouter(poolQuery, domainDir, SP_NAME, UPLOADS_DIR) {
+function createUploadRouter(poolQuery, domainDir, SP_NAME, UPLOADS_DIR, UPLOADS_SETTINGS_TABLE) {
    /** @returns {(file: string, args: import('server/router').IRouterArgs) => Promise<import('../domain/controllers/sp-controller').IApiResult<string>> } */
    function loadUploadController() {
       const sandbox = Object.freeze({
          console: Object.freeze(console),
-         sp: Object.freeze({ poolQuery, fsp: fs.promises, UPLOADS_DIR, func: Object.freeze(func) }),
+         sp: Object.freeze({ poolQuery, fsp: fs.promises, UPLOADS_DIR, UPLOADS_SETTINGS_TABLE, func: Object.freeze(func) }),
       })
       const controllerFile = domainDir + '/controllers/sp-upload-controller.js'
       const controllerSrc = fs.readFileSync(controllerFile, { encoding: 'utf-8' })

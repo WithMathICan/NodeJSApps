@@ -11,11 +11,8 @@ export const api = {}
  * @param {any} body
  * @returns
  */
-const post = async (url, body = '') => {
-   if (typeof body === 'object') body = JSON.stringify(body)
-   if (typeof body !== 'string') return console.error('typeof body !== \'string\'');
+export const post = async (url, body = '') => {
    loading.value = true
-
    try {
       const data = await fetch(url, { method: 'POST', body, headers: { 'Accept': 'application/json' } })
       if (!data.ok) {
@@ -24,11 +21,9 @@ const post = async (url, body = '') => {
       } else {
          const { result, message } = await data.json()
          if (message) showMessage(message, 5000, 'success')
-         // console.log(result);
          return result
       }
    } catch (/** @type {any} */ e) {
-      // console.log(e);
       showMessage(e.message, 15000, 'error')
       throw e
    } finally {
@@ -48,10 +43,10 @@ export function CreateApi(tables, API_PATH) {
          api[schema][table] = {
             GetCols: () => post(`${API_PATH}/${schema}/${table}/cols`),
             GetBeans: () => post(`${API_PATH}/${schema}/${table}/beans`),
-            GetBean: id => post(`${API_PATH}/${schema}/${table}/bean`, { id }),
-            InsertBean: bean => post(`${API_PATH}/${schema}/${table}/insert`, bean),
-            UpdateBean: (id, bean) =>  post(`${API_PATH}/${schema}/${table}/update`, { id, bean }),
-            RemoveBeans: ids => post(`${API_PATH}/${schema}/${table}/remove-many`, { ids }),
+            GetBean: id => post(`${API_PATH}/${schema}/${table}/bean`, JSON.stringify({ id })),
+            InsertBean: bean => post(`${API_PATH}/${schema}/${table}/insert`, JSON.stringify(bean)),
+            UpdateBean: (id, bean) =>  post(`${API_PATH}/${schema}/${table}/update`, JSON.stringify({ id, bean })),
+            RemoveBeans: ids => post(`${API_PATH}/${schema}/${table}/remove-many`, JSON.stringify({ ids })),
          }
       }
    }

@@ -27,6 +27,10 @@ const createServer = (uploadRouter, routers, console) => http.createServer(async
          req.pipe(fs.createWriteStream(tempFile))
          req.on('end', async () => {
             resData = await uploadRouter.handler(tempFile, args)
+            console.log({ resData });
+            res.writeHead(resData.statusCode, resData.headers)
+            resData.data = JSON.stringify(resData.data)
+            res.end(resData.data)
          })
          return
       }

@@ -26,6 +26,7 @@
 
 <script setup>
 import FileUpload from 'primevue/fileupload'
+import { post } from '../../api.js';
 import { API_PATH } from '../../../config'
 
 /** @type {{bean: any, col: import('types').Col}} */ // @ts-ignore
@@ -48,7 +49,7 @@ async function myUploader(e) {
       let blob = await res.blob()
       console.log(blob)
       const url = urlToUpload(file.name, file.type, file.lastModified, file.size)
-      fetch(url, {body: file, method: 'POST'})
+      post(url, file)
    } catch (e) {
       console.log(e);
    }

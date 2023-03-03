@@ -48,3 +48,13 @@ CREATE TABLE country.city___tags(
     PRIMARY KEY (city_id, tag_id)
 );
 
+CREATE TABLE country.uploads(
+    id SERIAL,
+    schema_name VARCHAR(50),
+    table_name VARCHAR(50),
+    files_dir VARCHAR(250) UNIQUE,
+    img_size INTEGER DEFAULT 1200,
+    CONSTRAINT countryUploadsSchemaTableUnique UNIQUE(schema_name, table_name),
+    PRIMARY KEY(id)
+)
+
