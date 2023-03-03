@@ -7,6 +7,4 @@ const randomString = size => crypto.randomBytes(size).toString('hex').substring(
 const generateToken = size => crypto.randomBytes(size).toString('hex')
 const generateUUID = () => crypto.randomUUID()
 
-console.log(randomString(5));
-
 module.exports = { md5, randomString, generateToken, generateUUID }

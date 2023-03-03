@@ -13,6 +13,7 @@ const {
    snakeToCamelCase, snakeToKebabCase, snakeToPascalCase,
 } = require('./src/string-cases.js')
 const { md5, generateToken, randomString, generateUUID } = require('./src/crypto-functions.js')
+const { isFileExist } = require('./src/fs-functions.js')
 
 module.exports = {
    SpLogger,
@@ -35,4 +36,5 @@ module.exports = {
    generateToken,
    randomString,
    generateUUID,
+   isFileExist,
 }

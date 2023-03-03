@@ -8,7 +8,7 @@
       const tableName = `${schema}.${table}`;
       const fModel = sp.models[tableName]
       if (!fModel) throw new Error('Model not found')
-      const model = fModel(sp.createCRUD(schema, table, sp.poolQuery))
+      const model = fModel(sp.func.createCRUD(schema, table, sp.poolQuery))
 
       const cols = async () => {
          const result = await model.cols()
