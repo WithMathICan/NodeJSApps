@@ -12,6 +12,7 @@ const {
    camelToKebabCase, camelToPascalCase, camelToSnakeCase,
    snakeToCamelCase, snakeToKebabCase, snakeToPascalCase,
 } = require('./src/string-cases.js')
+const { md5, generateToken, randomString, generateUUID } = require('./src/crypto-functions.js')
 
 module.exports = {
    SpLogger,
@@ -30,4 +31,8 @@ module.exports = {
    snakeToCamelCase,
    snakeToKebabCase,
    snakeToPascalCase,
+   md5,
+   generateToken,
+   randomString,
+   generateUUID,
 }

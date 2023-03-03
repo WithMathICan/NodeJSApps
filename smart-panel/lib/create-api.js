@@ -1,12 +1,9 @@
 'use strict'
 
 const fs = require('node:fs')
-const crypto = require('node:crypto')
-const { load, createCRUD, slugify, kebabToCamelCase } = require('../../common')
+const { load, createCRUD, slugify, kebabToCamelCase, md5 } = require('../../common')
 const { findDbTables, createCols } = require('./sp-functions')
 const { M2M } = require('../classes/M2M.js')
-
-const md5 = data => crypto.createHash('md5').update(data).digest('hex')
 
 const HEADERS = {
    'X-XSS-Protection': '1; mode=block',
