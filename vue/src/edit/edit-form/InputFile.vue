@@ -20,6 +20,7 @@
       :maxFileSize="1000000">
       <template #empty>
          <p>Drag and drop files to here to upload.</p>
+         <Image v-if="modelValue" :src="modelValue" :alt="modelValue" width="250" preview />
       </template>
    </FileUpload>
 </template>
@@ -29,27 +30,23 @@ import FileUpload from 'primevue/fileupload'
 import { post } from '../../api.js';
 import { API_PATH } from '../../../config'
 
-/** @type {{bean: any, col: import('types').Col}} */ // @ts-ignore
-let props = defineProps(['bean', 'col'])
-const urlToUpload = (fileName, fileType, lastModified, size) => 
-   `${API_PATH}/upload?schema=${props.col.table_schema}&table=${props.col.table_name}` +
-   `&fileName=${fileName}&fileType=${fileType}&lastModified=${lastModified}&size=${size}`
-// function onAdvancedUpload(e) {
-//    console.log(e);
-// }
-async function myUploader(e) {
-   console.log(e);
-   const file = e.files[0]; 
-   console.log(e.files[0]);
-   console.log(file.name, file.type);
-   console.log(file.lastModified, file.size)
+/** @type {{schema: string, table: string, field_name: string, modelValue: string}} */ // @ts-ignore
+let props = defineProps(['schema', 'table', 'field_name', 'modelValue'])
+const urlToUpload = (/** @type {string} */ fileName, /** @type {string} */ fileType, /** @type {string} */ lastModified, /** @type {string} */ size) => 
+   `${API_PATH}/upload?schema=${props.schema}&table=${props.table}&field_name=${props.field_name}` +
+   `&fileName=${fileName}&fileType=${fileType}&lastModified=${lastModified}&size=${size}`;
 
+const emit = defineEmits(['update:modelValue'])
+
+async function myUploader(e) {
+   const file = e.files[0]; 
    try{
-      let res = await fetch(file.objectURL)
-      let blob = await res.blob()
-      console.log(blob)
       const url = urlToUpload(file.name, file.type, file.lastModified, file.size)
-      post(url, file)
+      post(url, file).then(data => {
+         console.log({data});
+         emit('update:modelValue', data)
+         console.log({model: props.modelValue});
+      })
    } catch (e) {
       console.log(e);
    }

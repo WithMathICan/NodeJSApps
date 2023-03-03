@@ -16,8 +16,13 @@ export const post = async (url, body = '') => {
    try {
       const data = await fetch(url, { method: 'POST', body, headers: { 'Accept': 'application/json' } })
       if (!data.ok) {
-         const { message } = await data.json()
-         throw new Error(message ?? 'Ошибка сервера')
+         console.log({ data });
+         let message = ''
+         try {
+            const resJson = await data.json()
+            message = resJson.message
+         } catch (e) { /** Nothing to do */ }
+         throw new Error(message ?? 'Ошибка сервера ' + data.statusText)
       } else {
          const { result, message } = await data.json()
          if (message) showMessage(message, 5000, 'success')

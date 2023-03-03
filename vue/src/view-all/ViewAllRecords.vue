@@ -52,7 +52,9 @@
                <ColNumber v-else-if="col.data_type === 'number'" :bean="slotProps.data" :col="col" />
                <ColString v-else-if="col.data_type === 'varchar'"
                   :data="slotProps.data[col.column_name]?.substring(0, 150)" />
-               <ColM2M v-if="col.data_type === 'm2m'" :col="col" :bean="slotProps.data"></ColM2M>
+               <ColM2M v-else-if="col.data_type === 'm2m'" :col="col" :bean="slotProps.data"></ColM2M>
+               <Image v-else-if="col.data_type === 'file'" 
+                  :src="slotProps.data[col.column_name]" :alt="slotProps.data[col.column_name]" width="250" preview ></Image>
             </template>
             <template #filter="{ filterModel }">
                <Calendar v-if="col.data_type === 'date'" v-model="filterModel.value" dateFormat="dd-mm-yy"

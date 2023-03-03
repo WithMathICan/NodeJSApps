@@ -18,7 +18,8 @@
    <InputM2M :bean="bean" :col="col"></InputM2M>
 </div>
 <div v-else-if="col.data_type === 'file'">
-   <InputFile :bean="bean" :col="col"></InputFile>
+   <InputFile v-model="bean[col.column_name]"  
+      :schema="col.table_schema" :table="col.table_name" :field_name="col.column_name" ></InputFile>
 </div>
 </template>
 
@@ -30,6 +31,7 @@ import InputFk from './InputFk.vue'
 import InputM2M from './InputM2M.vue';
 import InputFile from './InputFile.vue';
 
+/** @type {{bean: any, col: import('types').Col}} */ // @ts-ignore
 let props = defineProps(['bean', 'col']) 
 
 if (props.col.data_type === 'date') {

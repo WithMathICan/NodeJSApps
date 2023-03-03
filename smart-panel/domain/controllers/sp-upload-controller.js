@@ -8,7 +8,7 @@
       try {
          // console.log('uploadController');
          const newFileName = await buildFileName(args.getParams.fileName)
-         await sp.fsp.rename(file, sp.UPLOADS_DIR + newFileName)
+         await sp.fsp.rename(file, sp.PUBLIC_DIR + newFileName)
          return { result: newFileName, statusCode: 200, message: 'OK' }
       } catch (/** @type {any} */ e) {
          console.error(e);
@@ -28,7 +28,7 @@
          //       newFileName += '-' + sp.func.randomString(3)
          //    }
          // }
-         if (await sp.func.isFileExist(sp.UPLOADS_DIR + newFileName)) {
+         if (await sp.func.isFileExist(sp.PUBLIC_DIR + newFileName)) {
             throw new Error('Не удалось сохранить файл, так как файл с таким именем уже существует')
          }
          return newFileName

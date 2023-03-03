@@ -2,7 +2,7 @@
    /** @param {import("../../country").country_city} record */
    function beforeSave(record) {
       if (record.title.length < 3) throw new Error('Title is very short');
-      record.code = sp.slugify(record.title);
+      record.code = sp.func.slugify(record.title);
    }
 
    /**

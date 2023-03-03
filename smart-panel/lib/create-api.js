@@ -140,15 +140,15 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
  * @param {import('common/types').FQuery} poolQuery
  * @param {string} domainDir
  * @param {string} SP_NAME
- * @param {string} UPLOADS_DIR
+ * @param {string} PUBLIC_DIR
  * @param {string} UPLOADS_SETTINGS_TABLE
  */
-function createUploadRouter(poolQuery, domainDir, SP_NAME, UPLOADS_DIR, UPLOADS_SETTINGS_TABLE) {
+function createUploadRouter(poolQuery, domainDir, SP_NAME, PUBLIC_DIR, UPLOADS_SETTINGS_TABLE) {
    /** @returns {(file: string, args: import('server/router').IRouterArgs) => Promise<import('../domain/controllers/sp-controller').IApiResult<string>> } */
    function loadUploadController() {
       const sandbox = Object.freeze({
          console: Object.freeze(console),
-         sp: Object.freeze({ poolQuery, fsp: fs.promises, UPLOADS_DIR, UPLOADS_SETTINGS_TABLE, func: Object.freeze(func) }),
+         sp: Object.freeze({ poolQuery, fsp: fs.promises, PUBLIC_DIR, UPLOADS_SETTINGS_TABLE, func: Object.freeze(func) }),
       })
       const controllerFile = domainDir + '/controllers/sp-upload-controller.js'
       const controllerSrc = fs.readFileSync(controllerFile, { encoding: 'utf-8' })
@@ -178,7 +178,7 @@ function createUploadRouter(poolQuery, domainDir, SP_NAME, UPLOADS_DIR, UPLOADS_
       return true
    }
 
-   const findNameForTemporaryFile = () => `${UPLOADS_DIR}/tmp/${func.md5(Math.random().toString() + Date.now().toString())}`
+   const findNameForTemporaryFile = () => `${PUBLIC_DIR}/uploads/tmp/${func.md5(Math.random().toString() + Date.now().toString())}`
 
    return {
       isUrlAccepted,

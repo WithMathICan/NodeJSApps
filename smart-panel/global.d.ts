@@ -23,7 +23,7 @@ export global {
       const poolQuery: FQuery
       const M2M: TM2M
       const fsp: TFs
-      const UPLOADS_DIR: string
+      const PUBLIC_DIR: string
       const UPLOADS_SETTINGS_TABLE: string
       const func: TFunc
    }

@@ -24,7 +24,7 @@ pool.query('SELECT 1+1').then(async () => {
    createInterfaces(config.DB_SCHEMAS, PG_DATABASE, poolQuery, config.RPOJECT_ROOT + '/domain')
    const staticRouter = createStaticRouter(config.RPOJECT_ROOT + '/public', logger)
    const apiRouter = await createApiRouter(PG_DATABASE, config.DB_SCHEMAS, poolQuery, config.RPOJECT_ROOT + '/domain', config.SP_NAME, logger)
-   const uploadRouter = createUploadRouter(poolQuery, config.RPOJECT_ROOT + '/domain', config.SP_NAME, config.UPLOADS_DIR, config.UPLOADS_SETTINGS_TABLE)
+   const uploadRouter = createUploadRouter(poolQuery, config.RPOJECT_ROOT + '/domain', config.SP_NAME, config.PUBLIC_DIR, config.UPLOADS_SETTINGS_TABLE)
    const server = createServer(uploadRouter, [staticRouter, apiRouter], logger)
    server.listen(config.PORT)
    logger.log('Server started on port', config.PORT)

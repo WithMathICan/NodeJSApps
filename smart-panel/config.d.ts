@@ -6,7 +6,7 @@ export interface IConfig {
    PORT: number
    SP_NAME: string
    RPOJECT_ROOT: string
-   UPLOADS_DIR: string
+   PUBLIC_DIR: string
    UPLOADS_SETTINGS_TABLE: string
 }
 

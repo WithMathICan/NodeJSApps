@@ -24,7 +24,8 @@ const createServer = (uploadRouter, routers, console) => http.createServer(async
       const args = { method, url: parsedUrl.pathname, getParams: parsedUrl.query }
       if (uploadRouter.isUrlAccepted(args)) {
          const tempFile = uploadRouter.findNameForTemporaryFile()
-         req.pipe(fs.createWriteStream(tempFile))
+         const stream = fs.createWriteStream(tempFile)
+         req.pipe(stream)
          req.on('end', async () => {
             resData = await uploadRouter.handler(tempFile, args)
             console.log({ resData });
