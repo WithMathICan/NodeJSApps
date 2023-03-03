@@ -3,22 +3,28 @@ import { createCols } from './lib/sp-functions'
 import { FSpModel, FCreateSpModel } from './domain/models/sp-model'
 import { FQuery } from 'common/types'
 import {M2M} from './classes/M2M'
+import { promises, PathLike } from 'node:fs'
+import * as tfunc from 'common'
 
 
-type TCreateCrud  = typeof createCRUD
 type TCreateCols = typeof createCols
 type TSlugify = typeof slugify
 type TM2M = typeof M2M
+type TFs = typeof promises
+type TFunc = typeof tfunc
+
 
 export global {
    namespace sp{
-      const createCRUD: TCreateCrud
       const PG_DATABASE: string
       const createCols: TCreateCols
       const models: Record<string, FSpModel>
       const createSpModel: FCreateSpModel
-      const slugify: TSlugify
       const poolQuery: FQuery
       const M2M: TM2M
+      const fsp: TFs
+      const PUBLIC_DIR: string
+      const UPLOADS_SETTINGS_TABLE: string
+      const func: TFunc
    }
 }

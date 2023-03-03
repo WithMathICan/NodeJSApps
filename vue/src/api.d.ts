@@ -33,3 +33,5 @@ export interface IMessage {
    timeOut: NodeJS.Timeout
    closeTime: number
 }
+
+export function post(url: string, body: any) : Promise<any>

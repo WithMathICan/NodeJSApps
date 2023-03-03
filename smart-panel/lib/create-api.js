@@ -1,9 +1,10 @@
 'use strict'
 
 const fs = require('node:fs')
-const { load, createCRUD, slugify, kebabToCamelCase } = require('../../common')
+// const { load, createCRUD, slugify, kebabToCamelCase, md5, isFileExist, randomString } = require('../../common')
 const { findDbTables, createCols } = require('./sp-functions')
 const { M2M } = require('../classes/M2M.js')
+const func = require('../../common')
 
 const HEADERS = {
    'X-XSS-Protection': '1; mode=block',
@@ -14,6 +15,19 @@ const HEADERS = {
    'Access-Control-Allow-Headers': 'Content-Type',
    'Content-Type': 'application/json; charset=UTF-8',
 };
+
+/**
+ * @param {any} result
+ * @param {string} message
+ * @param {number} statusCode
+ * @param {Record<string, string>} headers
+ * @returns {import('server/router').IServerResponse<{message: string, result: any}>}
+ */
+const createResponse = (result, message = 'OK', statusCode = 200, headers = HEADERS) => ({
+   statusCode,
+   data: { result, message },
+   headers
+})
 
 /**
  * @param {string} PG_DATABASE
@@ -31,11 +45,11 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
    function loadSpModel() {
       const sandbox = Object.freeze({
          console: Object.freeze(console),
-         sp: Object.freeze({ createCRUD, PG_DATABASE, createCols }),
+         sp: Object.freeze({ PG_DATABASE, createCols }),
       })
       const modelFilename = domainDir + '/models/sp-model.js'
       const modelSrc = fs.readFileSync(modelFilename, { encoding: 'utf-8' })
-      const { createSpModel } = load(modelSrc, sandbox, modelFilename)
+      const { createSpModel } = func.load(modelSrc, sandbox, modelFilename)
       console.log(createSpModel);
       return createSpModel
    }
@@ -46,7 +60,7 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
       const createSpModel = loadSpModel()
       const sandbox = Object.freeze({
          console: Object.freeze(console),
-         sp: Object.freeze({ createSpModel, slugify, M2M }),
+         sp: Object.freeze({ createSpModel, func: Object.freeze(func), M2M }),
       })
       for (const schema in dbTables) {
          for (const table of dbTables[schema]) {
@@ -56,7 +70,7 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
             if (fs.existsSync(fileSrc)) {
                src = fs.readFileSync(fileSrc, { encoding: 'utf-8' })
             } else fileSrc = domainDir + '/models/sp-model.js'
-            const model = load(src, sandbox, fileSrc)
+            const model = func.load(src, sandbox, fileSrc)
             models[key] = model
          }
       }
@@ -67,11 +81,11 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
    function loadSpController(models) {
       const sandbox = Object.freeze({
          console: Object.freeze(console),
-         sp: Object.freeze({ models, createCRUD, poolQuery }),
+         sp: Object.freeze({ models, func: Object.freeze(func), poolQuery }),
       })
       const controllerFile = domainDir + '/controllers/sp-controller.js'
-      const controllerSrc = fs.readFileSync(domainDir + '/controllers/sp-controller.js', { encoding: 'utf-8' })
-      const { createSpController } = load(controllerSrc, sandbox, controllerFile)
+      const controllerSrc = fs.readFileSync(controllerFile, { encoding: 'utf-8' })
+      const { createSpController } = func.load(controllerSrc, sandbox, controllerFile)
       return createSpController
    }
 
@@ -90,28 +104,13 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
       for (const schema in dbTables) {
          controllers[schema] = {}
          for (const table of dbTables[schema]) {
-            controllers[schema][table] = load(`createSpController('${schema}', '${table}');`, sandbox, controllerFile)
+            controllers[schema][table] = func.load(`createSpController('${schema}', '${table}');`, sandbox, controllerFile)
          }
       }
       return controllers
    }
 
    const controllers = loadApiControllers()
-   // console.log(controllers);
-
-   /**
-    * @param {any} result
-    * @param {string} message
-    * @param {number} statusCode
-    * @param {Record<string, string>} headers
-    * @returns {import('server/router').IServerResponse<{message: string, result: any}>}
-    */
-   const createResponse = (result, message = 'OK', statusCode = 200, headers = HEADERS) => ({
-      statusCode,
-      data: { result, message },
-      headers
-   })
-
    /**
     * @type {import('server/router').FRouter<{message: string, result: any}>}
     * @param {import('server/router').IRouterArgs} args
@@ -127,17 +126,66 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
          if (!schemaHandler) return null
          const tableHandler = schemaHandler[urlArr[3]]
          if (!tableHandler) return null
-         const handler = tableHandler[kebabToCamelCase(urlArr[4])]
+         const handler = tableHandler[func.kebabToCamelCase(urlArr[4])]
          if (!handler) return null
          const resData = await handler(args.postParams)
          return createResponse(resData.result, resData.message, resData.statusCode)
       }
-
       return null
    }
-
    return router
 }
 
-module.exports = { createApiRouter }
+/**
+ * @param {import('common/types').FQuery} poolQuery
+ * @param {string} domainDir
+ * @param {string} SP_NAME
+ * @param {string} PUBLIC_DIR
+ * @param {string} UPLOADS_SETTINGS_TABLE
+ */
+function createUploadRouter(poolQuery, domainDir, SP_NAME, PUBLIC_DIR, UPLOADS_SETTINGS_TABLE) {
+   /** @returns {(file: string, args: import('server/router').IRouterArgs) => Promise<import('../domain/controllers/sp-controller').IApiResult<string>> } */
+   function loadUploadController() {
+      const sandbox = Object.freeze({
+         console: Object.freeze(console),
+         sp: Object.freeze({ poolQuery, fsp: fs.promises, PUBLIC_DIR, UPLOADS_SETTINGS_TABLE, func: Object.freeze(func) }),
+      })
+      const controllerFile = domainDir + '/controllers/sp-upload-controller.js'
+      const controllerSrc = fs.readFileSync(controllerFile, { encoding: 'utf-8' })
+      const { uploadController } = func.load(controllerSrc, sandbox, controllerFile)
+      return uploadController
+   }
+
+   const uploadController = loadUploadController()
+   /**
+    * //@type {import('server/router').FRouter<{message: string, result: any}>}
+    * @param {string} fileName
+    * @param {import('server/router').IRouterArgs} args
+    */
+   const handler = async (fileName, args) => {
+      const resData = await uploadController(fileName, args)
+      return createResponse(resData.result, resData.message, resData.statusCode)
+   }
+
+   /** @param {import('server/router').IRouterArgs} args */
+   const isUrlAccepted = args => {
+      // console.log({args});
+      if (args.method !== 'POST') return false
+      const urlArr = args.url.split('/').filter(el => el)
+      if (urlArr[0] !== 'api') return false
+      if (urlArr[1] !== SP_NAME) return false
+      if (urlArr[2] !== 'upload') return false
+      return true
+   }
+
+   const findNameForTemporaryFile = () => `${PUBLIC_DIR}/uploads/tmp/${func.md5(Math.random().toString() + Date.now().toString())}`
+
+   return {
+      isUrlAccepted,
+      findNameForTemporaryFile,
+      handler,
+   }
+}
+
+module.exports = { createApiRouter, createUploadRouter }
 

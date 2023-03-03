@@ -2,7 +2,7 @@
    /** @param {import("../../country").country_city} record */
    function beforeSave(record) {
       if (record.title.length < 3) throw new Error('Title is very short');
-      record.code = sp.slugify(record.title);
+      record.code = sp.func.slugify(record.title);
    }
 
    /**
@@ -18,13 +18,13 @@
          async cols() {
             /** @type {import('../../../classes/Col').Col[]} */
             const cols = await baseModel.cols()
-            // console.log(cols);
-            const col = cols.find(el => el.column_name === 'tags')
+            let col = cols.find(el => el.column_name === 'tags')
             if (col) {
                col.m2m = new sp.M2M('tags', 'title', 'city___tags')
-               // eslint-disable-next-line camelcase
                col.data_type = 'm2m'
             }
+            col = cols.find(el => el.column_name === 'img')
+            if (col) col.data_type = 'file'
             return cols
          },
          async update(id, record) {

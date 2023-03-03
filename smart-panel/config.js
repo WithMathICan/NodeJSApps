@@ -13,6 +13,8 @@ const config = {
    PORT: 3000,
    SP_NAME: 'smart-panel',
    RPOJECT_ROOT: __dirname,
+   PUBLIC_DIR: __dirname + '/public',
+   UPLOADS_SETTINGS_TABLE: 'country.uploads',
 }
 
 module.exports = { config }

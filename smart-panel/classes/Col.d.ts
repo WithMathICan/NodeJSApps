@@ -1,7 +1,7 @@
 import { Fk } from "./Fk";
 import { M2M } from "./M2M";
 
-export type TColType = 'number' | 'varchar' | 'date' | 'fk' | 'm2m' | 'id';
+export type TColType = 'number' | 'varchar' | 'date' | 'fk' | 'm2m' | 'id' | 'file';
 
 export interface IDbCol{
    table_catalog: string, 

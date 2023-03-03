@@ -32,5 +32,14 @@ export interface country_city{
    created_at: Date
    updated_at: Date
    tags: number
+   img: string
+}
+
+export interface country_uploads{
+   id: number
+   schema_name: string
+   table_name: string
+   files_dir: string
+   img_size: number
 }
 
