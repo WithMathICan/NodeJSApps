@@ -153,8 +153,10 @@ function linkToEdit(bean) {
 
 </script>
 
-<style lang="scss">.link {
+<style lang="scss">
+.link {
    text-decoration: none;
    font-weight: 900;
    display: inline-block;
-}</style>
+}
+</style>
