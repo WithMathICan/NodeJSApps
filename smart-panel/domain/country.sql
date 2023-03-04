@@ -56,5 +56,13 @@ CREATE TABLE country.uploads(
     img_size INTEGER DEFAULT 1200,
     CONSTRAINT countryUploadsSchemaTableUnique UNIQUE(schema_name, table_name),
     PRIMARY KEY(id)
-)
+);
+
+CREATE TABLE country.category(
+    id SERIAL,
+    title VARCHAR(50) UNIQUE,
+    parent_id INTEGER,
+    CONSTRAINT fk_country_category_id FOREIGN KEY (parent_id) REFERENCES country.category(id) ON DELETE NO ACTION,
+    PRIMARY KEY(id)
+);
 

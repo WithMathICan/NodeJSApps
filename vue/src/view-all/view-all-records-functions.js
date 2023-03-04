@@ -11,7 +11,7 @@ export function sortCols(col1, col2) {
    return 0
 }
 
-export function createFilters(key, filters) {
+export function createFilters(key) {
    const cols = spColsData[key]
    if (!cols) return
    /** @type {import('primevue/datatable').DataTableFilterMeta} */
@@ -38,7 +38,7 @@ export function createFilters(key, filters) {
          }
       }
    }
-   filters.value = filter
+   return filter
 }
 
 /** @param {import('types').Col[]} cols*/

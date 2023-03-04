@@ -1,6 +1,8 @@
 <template>
    <span v-if="filters">{{ filters['global'].value }}</span>
    <h1 class="text-700 mb-2">{{ table }} </h1>
+   <Dropdown v-if="treeFields.length > 0" v-model="tableType" option-label="value" option-value="value"
+      :options="[{ value: 'simple' }].concat(treeFields.map(value => ({ value })))" />
    <div v-if="tableKey && Array.isArray(spBeans[tableKey])">
       <div class="mt-2 mb-2 flex justify-content-between align-items-center">
          <div>
@@ -21,7 +23,7 @@
          :stateKey="`dt-state-session-${schema}-${table}`" :globalFilterFields="['title']">
          <template #header>
             <div class="flex justify-content-between align-items-center mb-2">
-               <Button type="button" icon="pi pi-filter-slash" class="p-button-outlined" @click="createFilters()" />
+               <Button type="button" icon="pi pi-filter-slash" class="p-button-outlined" @click="filters=createFilters(tableKey)" />
                <span v-if="selectedBeans.length" class="text-blue-600">{{ selectedBeans.length }} выбрано</span>
             </div>
             <div style="text-align:left" v-if="Array.isArray(spColsData[tableKey])">
@@ -84,6 +86,35 @@
             </template>
          </Column>
       </DataTable>
+      {{ treeView }}
+      <TreeTable responsiveLayout="scroll" :value="treeView"
+         
+      >
+         <template #empty>
+            <h3 class="text-pink-500">Записей нет</h3>
+         </template>
+         <Column field="id" header="ID" :sortable="true" :expander="true">
+            <template #body="slotProps">
+               <router-link class="link p-button p-button-info" :to="linkToEdit(slotProps.node.data)">
+                  {{ slotProps.node.data.id }}
+               </router-link>
+            </template>
+         </Column>
+         <Column field="title" header="Title"></Column>
+         <!-- <Column field="name" header="Name" :expander="true"></Column> -->
+
+         <Column header="Actions">
+            <template #body="slotProps">
+               <ButtonDelete :schema="schema" :table="table" :ids="[slotProps.node.data.id]" label=""
+                  :delete-cb="clearSelected" />
+               <ButtonModalEdit :schema="schema" :table="table" :id="slotProps.node.data.id" />
+               <!-- <router-link class="link p-button p-button-secondary p-button-icon-only p-component"
+                  :to="{ name: 'copy', params: { schema, table, id: slotProps.data.id } }">
+                  <span class="pi pi-copy p-button-icon"></span>
+               </router-link> -->
+            </template>
+         </Column>
+      </TreeTable>
    </div>
 </template>
 
@@ -99,10 +130,13 @@ import ColNumber from './cols/ColNumber.vue'
 import ButtonDelete from '../edit/components/ButtonDelete.vue';
 import ButtonModalEdit from '../edit/components/ButtonModalEdit.vue';
 import ColM2M from './cols/ColM2M.vue';
+import Column from 'primevue/column'
+import Dropdown from 'primevue/dropdown'
+import TreeTable from 'primevue/treetable'
 
-const props = defineProps({ 
-   schema: {type: String, required: true}, 
-   table: {type: String, required: true },
+const props = defineProps({
+   schema: { type: String, required: true },
+   table: { type: String, required: true },
 })
 
 let tableKey = computed(() => spTableKey(props.schema, props.table))
@@ -135,11 +169,43 @@ function onToggle(val) {
    }
 };
 
+const tableType = ref('simple')
+const treeFields = computed(() => {
+   const cols = spColsData[tableKey.value]
+   const arr = []
+   if (!Array.isArray(cols)) return arr
+   for (let col of cols) if (col.fk) {
+      if (col.fk.foreign_table_schema === props.schema && col.fk.foreign_table_name === props.table) arr.push(col.column_name)
+   }
+   return arr
+})
+const treeView = computed(() => {
+   const field = tableType.value
+   // if (field === 'simple') return []
+   const resBeans = []
+   const beansObject = {}
+   /** @type {import('../../../smart-panel/domain/country').country_category[]} */ //@ts-ignore
+   const beans = spBeans[tableKey.value]
+   if (!Array.isArray(beans)) return []
+   if (beans.length === 0) return []
+   for (const bean of beans) beansObject[bean.id] = { key: bean.id, data: bean }
+   for (const id in beansObject) {
+      if (beansObject[id].data.parent_id) {
+         if (!beansObject[beansObject[id].data.parent_id].children) beansObject[beansObject[id].data.parent_id].children = []
+         beansObject[beansObject[id].data.parent_id].children.push(beansObject[id])
+      } else {
+         resBeans.push(beansObject[id])
+      }
+   }
+   return resBeans
+})
+
 function init() {
+   tableType.value = 'simple'
    FillBeans(props.schema, props.table)
    FillColsData(props.schema, props.table).then(cols => {
       setInitialCols(cols, selectedColumns, localStorageKey)
-      createFilters(tableKey.value, filters)
+      filters.value = createFilters(tableKey.value)
    })
 }
 

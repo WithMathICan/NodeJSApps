@@ -19,6 +19,7 @@ let key = spTableKey(fk.foreign_table_schema, fk.foreign_table_name)
 let showOptions = computed(() => {
    if (Array.isArray(spBeans[key])) return spBeans[key].sort((a, b) => {
       if (a[fk.foreign_title_column_name] > b[fk.foreign_title_column_name]) return 1
+      else if (a[fk.foreign_title_column_name] === b[fk.foreign_title_column_name]) return 0
       return -1
    })
    return []

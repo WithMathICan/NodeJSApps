@@ -43,3 +43,14 @@ export interface country_uploads{
    img_size: number
 }
 
+export interface country_test{
+   id: number
+   value: string
+}
+
+export interface country_category{
+   id: number
+   title: string
+   parent_id: string
+}
+
