@@ -4,7 +4,7 @@
       <template #title>Аттрибуты</template>
       <template #content>
          <div class="grid2 mb-2" v-for="attr in usedAttributes">
-            <div>{{ attr.title }}</div>
+            <div class="text-right">{{ attr.title }}</div>
             <div class="p-inputgroup">
                <InputNumber v-if="attr.attribute_type === 'integer'" v-model.number="modelValue[attr.title]" />
                <InputNumber v-else-if="attr.attribute_type === 'float'" v-model.number="modelValue[attr.title]" :minFractionDigits="0" :maxFractionDigits="20" />
@@ -13,7 +13,8 @@
             </div>
          </div>
          <div class="grid2">
-            <Button icon="pi pi-plus" class="p-button-rounded p-button-success m-2" label="Добавить аттрибут" @click="addAttribute"></Button>
+            <Button icon="pi pi-plus" class="p-button-rounded p-button-success m-2" label="Добавить аттрибут" 
+               :disabled="!selectedAttribute" @click="addAttribute"></Button>
             <Dropdown class="w-full" v-model="selectedAttribute" :options="unusedAttributes" optionLabel="title" 
                :filter="(unusedAttributes.length>8)" placeholder="Выбрать аттрибут" />
          </div>
@@ -46,6 +47,7 @@ function addAttribute(){
    }
    props.modelValue[selectedAttribute.value.title] = selectedAttribute.value.attribute_type === 'text' ? '' : 0
    emit('update:modelValue', props.modelValue)
+   selectedAttribute.value = null
 }
 function removeAttribute(name){
    delete props.modelValue[name]
@@ -57,5 +59,6 @@ function removeAttribute(name){
    display: grid;
    grid-template-columns: 1fr 1fr;
    align-items: center;
+   grid-column-gap: 1rem;
 }
 </style>
