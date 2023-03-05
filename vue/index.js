@@ -29,8 +29,9 @@ import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import Card from 'primevue/card'
 import Image from 'primevue/image'
+import Dropdown from 'primevue/dropdown'
 
-const primevueComponents = [DataTable, Column, Calendar, MultiSelect, Button, InputText, InputNumber, Card, Image]
+const primevueComponents = [DataTable, Column, Calendar, MultiSelect, Button, InputText, InputNumber, Card, Image, Dropdown]
 
 
 async function start() {

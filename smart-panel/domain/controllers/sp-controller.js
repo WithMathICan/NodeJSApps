@@ -20,7 +20,6 @@
       const bean = async ({ id, fields = ['*'] }) => {
          const result = await model.bean(id, fields)
          if (!result) return { statusCode: 404, message: 'Bean not found', result }
-         delete result['id']
          return { statusCode: 200, message: 'OK', result }
       }
 

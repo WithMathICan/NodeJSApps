@@ -15,7 +15,7 @@
             <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
          </span>
       </div>
-      <DataTable responsiveLayout="scroll" :value="spBeans[tableKey]" dataKey="id" :rowHover="true"
+      <DataTable v-if="tableType === 'simple'" responsiveLayout="scroll" :value="spBeans[tableKey]" dataKey="id" :rowHover="true"
          v-model:filters="filters" filterDisplay="menu" v-model:selection="selectedBeans" :rows="10" :paginator="true"
          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
          :rowsPerPageOptions="[2, 5, 10, 25, 50, 100, 500]"
@@ -86,10 +86,7 @@
             </template>
          </Column>
       </DataTable>
-      {{ treeView }}
-      <TreeTable responsiveLayout="scroll" :value="treeView"
-         
-      >
+      <TreeTable v-else responsiveLayout="scroll" :value="treeView">
          <template #empty>
             <h3 class="text-pink-500">Записей нет</h3>
          </template>
@@ -108,10 +105,10 @@
                <ButtonDelete :schema="schema" :table="table" :ids="[slotProps.node.data.id]" label=""
                   :delete-cb="clearSelected" />
                <ButtonModalEdit :schema="schema" :table="table" :id="slotProps.node.data.id" />
-               <!-- <router-link class="link p-button p-button-secondary p-button-icon-only p-component"
-                  :to="{ name: 'copy', params: { schema, table, id: slotProps.data.id } }">
+               <router-link class="link p-button p-button-secondary p-button-icon-only p-component"
+                  :to="{ name: 'copy', params: { schema, table, id: slotProps.node.data.id } }">
                   <span class="pi pi-copy p-button-icon"></span>
-               </router-link> -->
+               </router-link>
             </template>
          </Column>
       </TreeTable>

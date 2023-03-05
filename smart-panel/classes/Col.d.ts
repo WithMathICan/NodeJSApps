@@ -1,7 +1,7 @@
 import { Fk } from "./Fk";
 import { M2M } from "./M2M";
 
-export type TColType = 'number' | 'varchar' | 'date' | 'fk' | 'm2m' | 'id' | 'file';
+export type TColType = 'number' | 'varchar' | 'date' | 'fk' | 'm2m' | 'id' | 'file' | 'key-value';
 
 export interface IDbCol{
    table_catalog: string, 
@@ -14,6 +14,11 @@ export interface IDbCol{
    ordinal_position: number
    udt_name: string
    column_default: any
+}
+
+export interface IKeyValue {
+   keys_schema_name: string
+   keys_table_name: string
 }
 
 export class Col{
@@ -29,6 +34,7 @@ export class Col{
    is_array: boolean
    fk: Fk
    m2m: M2M
+   keyValue: IKeyValue
 
    constructor(col_data: IDbCol)
 }

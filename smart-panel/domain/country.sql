@@ -66,3 +66,18 @@ CREATE TABLE country.category(
     PRIMARY KEY(id)
 );
 
+CREATE TABLE country.attribute_type(
+    id SERIAL,
+    title VARCHAR(50),
+    CONSTRAINT unique_country_attribute_type_title UNIQUE(title),
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE country.attribute(
+    id SERIAL,
+    title VARCHAR(50),
+    attribute_type VARCHAR(50),
+    CONSTRAINT country_attribute_type_fk FOREIGN KEY(attribute_type) REFERENCES country.attribute_type(title) ON DELETE NO ACTION,
+    PRIMARY KEY (id)
+);
+

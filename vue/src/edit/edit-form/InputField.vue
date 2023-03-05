@@ -1,25 +1,18 @@
 <template>
-<div v-if="col.data_type === 'varchar'">
+<div>
    <label :for="col.column_name">{{col.column_name}}<span class="text-red-500" v-if="!col.is_nullable">*</span></label>
-   <InputText class="w-full" :required="!col.is_nullable" :id="col.column_name" type="text" v-model="bean[col.column_name]"/>
-</div>
-<div v-else-if="col.data_type === 'number'">
-   <label :for="col.column_name">{{col.column_name}}<span class="text-red-500" v-if="!col.is_nullable">*</span></label>
-   <InputNumber class="w-full" :required="!col.is_nullable" :id="col.column_name" v-model.number="bean[col.column_name]" />
-</div>
-<div v-else-if="col.data_type === 'date'">
-   <label :for="col.column_name">{{col.column_name}}<span class="text-red-500" v-if="!col.is_nullable">*</span></label>
-   <Calendar class="w-full" :required="!col.is_nullable" v-model="bean[col.column_name]" :showTime="true" />
-</div>
-<div v-else-if="col.data_type === 'fk'">
-   <InputFk :bean="bean" :col="col"></InputFk>
-</div>
-<div v-else-if="col.data_type === 'm2m'">
-   <InputM2M :bean="bean" :col="col"></InputM2M>
-</div>
-<div v-else-if="col.data_type === 'file'">
-   <InputFile v-model="bean[col.column_name]"  
+   <InputText v-if="col.data_type === 'varchar'" class="w-full" :required="!col.is_nullable" :id="col.column_name" 
+      type="text" v-model="bean[col.column_name]"/>
+   <InputNumber v-else-if="col.data_type === 'number'" class="w-full" :required="!col.is_nullable" 
+      :id="col.column_name" v-model.number="bean[col.column_name]" />
+   <Calendar v-else-if="col.data_type === 'date'" class="w-full" :required="!col.is_nullable" 
+      v-model="bean[col.column_name]" :showTime="true" />
+   <InputFk v-else-if="col.data_type === 'fk'" :bean="bean" :col="col"></InputFk>
+   <InputM2M v-else-if="col.data_type === 'm2m'" :bean="bean" :col="col"></InputM2M>
+   <InputFile v-else-if="col.data_type === 'file'" v-model="bean[col.column_name]"  
       :schema="col.table_schema" :table="col.table_name" :field_name="col.column_name" ></InputFile>
+   <InputKeyValue v-else-if="col.data_type  === 'key-value'" :key_schema="col.keyValue.keys_schema_name" 
+      :key_table="col.keyValue.keys_table_name" v-model="bean[col.column_name]"/>
 </div>
 </template>
 
@@ -30,11 +23,12 @@ import Calendar from 'primevue/calendar';
 import InputFk from './InputFk.vue'
 import InputM2M from './InputM2M.vue';
 import InputFile from './InputFile.vue';
+import InputKeyValue from './InputKeyValue.vue';
 
 /** @type {{bean: any, col: import('types').Col}} */ // @ts-ignore
 let props = defineProps(['bean', 'col']) 
 
-if (props.col.data_type === 'date') {
+if (props.col.data_type === 'date' && props.bean[props.col.column_name]) {
    let date = Date.parse(props.bean[props.col.column_name])
    props.bean[props.col.column_name] = date ? new Date(date) : new Date()
 }

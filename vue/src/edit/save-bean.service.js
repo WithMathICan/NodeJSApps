@@ -30,6 +30,7 @@ export const createSaveData = (props, actionType) =>  {
       if (actionType === 'insert') bean.value = findBean0(cols.value)
       else if ((actionType === 'copy' || actionType === 'update') && props.id !== undefined) {
          bean.value = await api[props.schema][props.table].GetBean(props.id)
+         if (actionType === 'copy') delete bean.value.id
       }
    }
 

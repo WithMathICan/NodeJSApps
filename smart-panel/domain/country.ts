@@ -7,6 +7,11 @@ export interface country_country{
    updated_at: Date
 }
 
+export interface country_attribute{
+   id: number
+   title: string
+}
+
 export interface country_region{
    id: number
    title: string
@@ -33,6 +38,7 @@ export interface country_city{
    updated_at: Date
    tags: number
    img: string
+   attributes: string
 }
 
 export interface country_uploads{

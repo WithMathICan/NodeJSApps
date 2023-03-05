@@ -18,7 +18,7 @@
                   <router-link class="link p-button p-button-warning mr-1" :to="{name: 'new', params: {schema, table}}">Создать</router-link>
                   <span class="mr-1"><ButtonDelete :schema="schema" :table="table" :ids="[id]" :deleteCb="viewAll" /></span>
                </span>
-               <router-link v-if="id" class="link p-button mr-1" :to="{name: 'copy', params: {schema, table, id}}">Все записи</router-link>
+               <router-link v-if="id" class="link p-button mr-1" :to="{ name: `view_all_${schema}_${table}`}">Все записи</router-link>
             </div>
             <div v-if="isBeanChanged" class="text-pink-500 font-bold mt-2">Есть не сохраненные изменения!</div>
          </form>
