@@ -16,7 +16,6 @@ export const post = async (url, body = '') => {
    try {
       const data = await fetch(url, { method: 'POST', body, headers: { 'Accept': 'application/json' } })
       if (!data.ok) {
-         console.log({ data });
          let message = ''
          try {
             const resJson = await data.json()
