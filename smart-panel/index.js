@@ -3,7 +3,6 @@
 const { createPgPool, SpLogger } = require('../common')
 const { config } = require('./config')
 const { createServer } = require('../server/create-server');
-const { createStaticRouter } = require('../server/static-router');
 const { createInterfaces } = require('./lib/create-interfaces');
 const { createApiRouter, createUploadRouter } = require('./lib/create-api');
 
@@ -22,10 +21,9 @@ pool.query('SELECT 1+1').then(async () => {
    /** @type {import('common/types').FQuery} */
    const poolQuery = (a, b) => pool.query(a, b)
    createInterfaces(config.DB_SCHEMAS, PG_DATABASE, poolQuery, config.RPOJECT_ROOT + '/domain')
-   const staticRouter = createStaticRouter(config.RPOJECT_ROOT + '/public', logger)
    const apiRouter = await createApiRouter(PG_DATABASE, config.DB_SCHEMAS, poolQuery, config.RPOJECT_ROOT + '/domain', config.SP_NAME, logger)
    const uploadRouter = createUploadRouter(poolQuery, config.RPOJECT_ROOT + '/domain', config.SP_NAME, config.PUBLIC_DIR, config.UPLOADS_SETTINGS_TABLE)
-   const server = createServer(uploadRouter, [staticRouter, apiRouter], logger)
+   const server = createServer([config.RPOJECT_ROOT + '/public'], uploadRouter, apiRouter, logger)
    server.listen(config.PORT)
    logger.log('Server started on port', config.PORT)
 })

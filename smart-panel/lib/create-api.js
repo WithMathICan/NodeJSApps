@@ -3,7 +3,6 @@
 const fs = require('node:fs')
 // const { load, createCRUD, slugify, kebabToCamelCase, md5, isFileExist, randomString } = require('../../common')
 const { findDbTables, createCols } = require('./sp-functions')
-const { M2M } = require('../classes/M2M.js')
 const func = require('../../common')
 
 const HEADERS = {
@@ -60,7 +59,7 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
       const createSpModel = loadSpModel()
       const sandbox = Object.freeze({
          console: Object.freeze(console),
-         sp: Object.freeze({ createSpModel, func: Object.freeze(func), M2M }),
+         sp: Object.freeze({ createSpModel, func: Object.freeze(func) }),
       })
       for (const schema in dbTables) {
          for (const table of dbTables[schema]) {
@@ -157,8 +156,8 @@ function createUploadRouter(poolQuery, domainDir, SP_NAME, PUBLIC_DIR, UPLOADS_S
    }
 
    const uploadController = loadUploadController()
+
    /**
-    * //@type {import('server/router').FRouter<{message: string, result: any}>}
     * @param {string} fileName
     * @param {import('server/router').IRouterArgs} args
     */
