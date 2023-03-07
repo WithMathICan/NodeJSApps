@@ -18,3 +18,5 @@ export type FUrlHandler<T> = (args: any) => Promise<IServerResponse<T>>
 // export type FRouter<T> = (method: string, url: string) => Promise<FUrlHandler<T> | null>
 export type FRouter<T> = (args: IRouterArgs) => Promise<IServerResponse<T> | null>
 
+export type FStaticFilesHandler = (url: string) => Promise<IServerResponse<any> | null> 
+

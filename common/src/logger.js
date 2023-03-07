@@ -4,7 +4,6 @@ const DATETIME_LENGTH = 19;
 
 const { Console } = require('node:console');
 const fs = require('node:fs')
-//const path = require('node:path')
 
 class SpLogger {
 
