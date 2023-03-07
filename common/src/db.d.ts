@@ -32,7 +32,7 @@ export interface ICrud {
 }
 
 export type FQuery = (sql: string, arr: any[]) => Promise<QueryResult<any>>
-export function createCRUD(tableName: string, query: FQuery): ICrud
+export function createCRUD(schema: string, table: string, query: FQuery): ICrud
 export type FCreateCRUD = typeof createCRUD
 
 export const createPgPool: (data: IDbSettings) => Pool

@@ -26,7 +26,8 @@ function initDbClientCreator(pool) {
 }
 
 /** @type {import("./db").FCreateCRUD} */
-const createCRUD = (tableName, query) => {
+const createCRUD = (schema, table, query) => {
+   const tableName = `${schema}.${table}`
    const queryFirst = async (/** @type {string} */ sql, arr = []) => (await query(sql, arr)).rows[0]
    const queryAll = async (/** @type {string} */ sql, arr = []) => (await query(sql, arr)).rows
 

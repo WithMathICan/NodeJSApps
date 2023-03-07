@@ -1,4 +1,2 @@
 export {SpLogger} from './src/logger'
-export {DbRecord, ICrud, FQuery} from './src/crud'
-export {IDbSettings} from './src/create-pg'
-export {FDbClientCreator} from './src/dbClient'
+export {DbRecord, ICrud, FQuery, IDbSettings, FCreateCRUD, FDbClientCreator, IDbClient, createCRUD, createPgPool, initDbClientCreator} from './src/db'

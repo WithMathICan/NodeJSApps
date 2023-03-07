@@ -42,27 +42,46 @@ ON ccu.constraint_name = tc.constraint_name
 WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema=$1 AND tc.table_name=$2`
 
 /**
-* @param {string} schema
-* @param {string} table
-* @param {string} database
-* @param {import('common/types').FQuery} query
-* @returns {Promise<Col[]>}
-*/
-async function createCols(schema, table, database, query, fk_title_name) {
+ * @param {string} schema
+ * @param {string} table
+ * @param {string} database
+ * @param {import('common/types').FQuery} query
+ * @returns
+ */
+async function findColumns(schema, table, database, query) {
    const dbCols = await query(MY_SQL_COLS, [database, schema, table])
    /** @type {import('../classes/Col').Col[]} */
    const cols = dbCols.rows.map(el => new Col(el))
-   const dbFkData = await query(MY_SQL_FK, [schema, table])
-   /** @type {import('../classes/Col').IDbFk[]} */
-   const dbFk = dbFkData.rows
+   return cols
+}
 
-   for (const fk of dbFk) for (const col of cols) {
+/**
+ * @param {import('../classes/Col').Col[]} cols
+ * @param {import('../classes/Col').IDbFk[]} dbForeignKeys
+ * @param {string} fk_title_name
+ */
+function updateColumns(cols, dbForeignKeys, fk_title_name) {
+   for (const fk of dbForeignKeys) for (const col of cols) {
       if (col.column_name === fk.column_name) {
          col.data_type = 'fk'
          const { foreign_table_name, foreign_table_schema, foreign_column_name } = fk
          col.fk = { foreign_column_name, foreign_table_name, foreign_table_schema, foreign_title_column_name: fk_title_name }
       }
    }
+}
+
+/**
+* @param {string} schema
+* @param {string} table
+* @param {string} database
+* @param {import('common/types').FQuery} query
+* @param {string} fk_title_name
+* @returns {Promise<Col[]>}
+*/
+async function createCols(schema, table, database, query, fk_title_name) {
+   const cols = await findColumns(schema, table, database, query)
+   const { rows } = await query(MY_SQL_FK, [schema, table])
+   updateColumns(cols, rows, fk_title_name)
    return cols
 }
 
@@ -85,4 +104,4 @@ async function findDbTables(schemas, query) {
    return dbTables
 }
 
-module.exports = { createCols, findDbTables }
+module.exports = { createCols, findDbTables, findColumns }

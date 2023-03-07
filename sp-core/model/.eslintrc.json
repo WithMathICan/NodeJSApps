@@ -1,0 +1,20 @@
+{
+   "parserOptions": {
+      "sourceType": "module"
+   },
+   "globals": {
+      "sp": "readonly"
+   },
+   "rules": {
+      "strict": [
+         "error",
+         "never"
+      ],
+      "id-denylist": [
+         2,
+         "db",
+         "console"
+      ],
+      "camelcase":"off"
+   }
+}

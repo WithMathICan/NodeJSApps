@@ -13,7 +13,7 @@ class Col {
    /** @type {import('./Col').TColType} */ data_type
    /** @type {boolean} */ is_array
    /** @type {import('./Col').IFk | undefined} */ fk
-   /** @type {import('./Col').M2M | undefined} */ m2m
+   /** @type {import('./Col').IM2M | undefined} */ m2m
 
    /** @param {import('./Col').IDbCol} col_data */
    constructor(col_data) {
