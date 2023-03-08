@@ -1,19 +1,18 @@
+const { createCRUD } = require('common')
+const { createCols } = require('../lib/sp-functions')
+
 /**
  * @type {import("./sp-model.d").FCreateSpModel}
  * @param {string} schema
  * @param {string} table
  */
-const createSpModel = (schema, table) => {
+const createSpModel = (schema, table, PG_DATABASE, fk_title_name) => {
    /** @type {import("./sp-model.d").FSpModel} */
    function model(query) {
-      const crud = sp.createCRUD(schema, table, query)
+      const crud = createCRUD(schema, table, query)
       /** @type {import("./sp-model.d").ISpModel} */
       const SpModel = {
-         async cols() {
-            const result = await sp.createCols(schema, table, sp.PG_DATABASE, query)
-            //result = result.filter(el => el.column_name !== 'id')
-            return result
-         },
+         cols: () => createCols(schema, table, PG_DATABASE, query, fk_title_name),
          insert: bean => crud.insert(bean),
          update: (id, bean) => crud.update(id, bean),
          bean: (id, fields = ['*']) => crud.findById(id, fields),

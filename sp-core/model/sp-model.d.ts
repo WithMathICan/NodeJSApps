@@ -13,5 +13,5 @@ export interface ISpModel {
 }
 
 export type FSpModel = (query: FQuery) => ISpModel;
-export function createSpModel(schema: string, table: string) : FSpModel
+export function createSpModel(schema: string, table: string, PG_DATABASE: string, fk_title_name: string) : FSpModel
 export type FCreateSpModel = typeof createSpModel
