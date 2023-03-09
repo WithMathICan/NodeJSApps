@@ -1,4 +1,4 @@
-const { createCRUD } = require('common')
+const { createCRUD } = require('../../common')
 const { createCols } = require('../lib/sp-functions')
 
 /**

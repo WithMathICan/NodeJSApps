@@ -1,6 +1,6 @@
 'use strict'
 
-const { camelToKebabCase } = require('common/main');
+const { camelToKebabCase } = require('../../common');
 const { controllers } = require('./controllers')
 
 const HEADERS = {
