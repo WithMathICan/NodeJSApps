@@ -10,6 +10,8 @@ export interface IConfig {
    UPLOADS_SETTINGS_TABLE: string
    UPLOADS_URL: string
    UPLOADS_SUFFIX: string
+   FK_TITLE_COLUMN: string
+   API_PREFIX: string
 }
 
 export const config: IConfig

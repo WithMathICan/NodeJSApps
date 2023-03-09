@@ -10,11 +10,11 @@ const { createStaticServer } = require('./static-files-handler.js')
 /**
  * @param {string[]} staticFolders
  * @param {import('./router').IUploadRouter} uploadRouter
- * @param {import('./router').IApiHandler[]} apiHandlers
+ * @param {import('./router').IApiHandler[]} routes
  * @param {import('common').SpLogger} console
  * @returns {http.Server}
  */
-const createServer = (staticFolders, uploadRouter, apiHandlers, console) => {
+const createServer = (staticFolders, uploadRouter, routes, console) => {
    const staticHandler = createStaticServer(staticFolders)
 
    return http.createServer(async (req, res) => {
@@ -47,7 +47,7 @@ const createServer = (staticFolders, uploadRouter, apiHandlers, console) => {
             return
          }
 
-         for (const apiHandler of apiHandlers) {
+         for (const apiHandler of routes) {
             if (apiHandler.isUrlAccepted(args)) {
                if (apiHandler.isPostDataNeeded) args.postParams = await receiveArgs(req)
                resData = await apiHandler.handler(args)

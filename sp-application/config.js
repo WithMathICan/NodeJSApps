@@ -1,5 +1,7 @@
 'use strict'
 
+const API_PREFIX = 'api/smart-panel'
+
 /** @type {import("./config").IConfig} */
 const config = {
    DB_SCHEMAS: ['public', 'country'],
@@ -15,8 +17,10 @@ const config = {
    RPOJECT_ROOT: __dirname,
    PUBLIC_DIR: __dirname + '/public',
    UPLOADS_SETTINGS_TABLE: 'country.uploads',
-   UPLOADS_URL: '/api/smart-panel/upload',
+   API_PREFIX,
+   UPLOADS_URL: API_PREFIX + '/upload',
    UPLOADS_SUFFIX: 'uploads',
+   FK_TITLE_COLUMN: 'title',
 }
 
 module.exports = { config }

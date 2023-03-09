@@ -251,6 +251,9 @@
     "template-curly-spacing": [
       "error",
       "never"
+    ],
+    "no-unused-vars": [
+      "error", {"argsIgnorePattern" : "^_"}
     ]
   }
 }

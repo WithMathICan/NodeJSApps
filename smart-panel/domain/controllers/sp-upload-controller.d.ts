@@ -1,4 +1,4 @@
-import { IRouterArgs } from "server/router";
+import { IRouterArgs } from "server/src/router";
 import { IApiResult } from "./sp-controller";
 
 export interface IUploadGetParams {

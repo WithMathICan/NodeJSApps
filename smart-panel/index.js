@@ -2,7 +2,7 @@
 
 const { createPgPool, SpLogger } = require('../common')
 const { config } = require('./config')
-const { createServer } = require('../server/create-server');
+const { createServer } = require('../server/src/create-server');
 const { createInterfaces } = require('./lib/create-interfaces');
 const { createApiRouter, createUploadRouter } = require('./lib/create-api');
 

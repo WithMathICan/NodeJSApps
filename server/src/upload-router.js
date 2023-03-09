@@ -1,6 +1,6 @@
 'use strict'
 
-const func = require('../common')
+const func = require('../../common')
 const fs = require('node:fs')
 
 const HEADERS = {

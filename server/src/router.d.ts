@@ -3,11 +3,11 @@ export interface IServerResponse<T> {
    data: T
    statusCode: number
 }
-export interface IRouterArgs {
+export interface IRouterArgs<TGet> {
    method: string
    url: string
    urlArray: string[]
-   getParams?: Record<string, any>
+   getParams: TGet
    postParams?: Record<string, any>
    uploadedFilePath?: string
 }
@@ -19,20 +19,18 @@ interface IUploadGetParams {
    lastModified: string
    size: string
 }
+export interface IAploadArgs extends IRouterArgs<IUploadGetParams>{}
 
-export interface IAploadArgs extends IRouterArgs {
-   getParams: IUploadGetParams
-}
 export interface IUploadRouter {
-   isUrlAccepted: (args: IRouterArgs) => boolean
-   handler: (tempFile: string, args: IAploadArgs) => Promise<IServerResponse<{message: string, result: string}>>
+   isUrlAccepted: (args: IRouterArgs<>) => boolean
+   handler: (tempFile: string, args: IRouterArgs<IUploadGetParams>) => Promise<IServerResponse<{message: string, result: string}>>
    findNameForTemporaryFile: () => string
 }
 
 export interface IApiHandler<T> {
-   isUrlAccepted(args: IRouterArgs) : boolean
+   isUrlAccepted(args: IRouterArgs<Record<string, string>>) : boolean
    isPostDataNeeded: boolean
-   handler(args: IRouterArgs) : Promise<IServerResponse<{message: srting, result: T}>>
+   handler(args: IRouterArgs<Record<string, string>>) : Promise<IServerResponse<{message: srting, result: T}>>
 }
 
 export type FUrlHandler<T> = (args: any) => Promise<IServerResponse<T>>

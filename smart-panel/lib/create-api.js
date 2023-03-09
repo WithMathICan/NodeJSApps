@@ -20,7 +20,7 @@ const HEADERS = {
  * @param {string} message
  * @param {number} statusCode
  * @param {Record<string, string>} headers
- * @returns {import('server/router').IServerResponse<{message: string, result: any}>}
+ * @returns {import('server/src/router').IServerResponse<{message: string, result: any}>}
  */
 const createResponse = (result, message = 'OK', statusCode = 200, headers = HEADERS) => ({
    statusCode,
@@ -35,7 +35,7 @@ const createResponse = (result, message = 'OK', statusCode = 200, headers = HEAD
  * @param {string} domainDir
  * @param {string} SP_NAME
  * @param {import('common').SpLogger} console
- * @returns {Promise<import('server/router').FRouter<{message: string, result: any}>>}
+ * @returns {Promise<import('server/src/router').FRouter<{message: string, result: any}>>}
  */
 async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP_NAME, console) {
    const dbTables = await findDbTables(DB_SCHEMAS, poolQuery)
@@ -111,8 +111,8 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
 
    const controllers = loadApiControllers()
    /**
-    * @type {import('server/router').FRouter<{message: string, result: any}>}
-    * @param {import('server/router').IRouterArgs} args
+    * @type {import('server/src/router').FRouter<{message: string, result: any}>}
+    * @param {import('server/src/router').IRouterArgs} args
     */
    const router = async args => {
       if (args.method !== 'POST') return null
@@ -143,7 +143,7 @@ async function createApiRouter(PG_DATABASE, DB_SCHEMAS, poolQuery, domainDir, SP
  * @param {string} UPLOADS_SETTINGS_TABLE
  */
 function createUploadRouter(poolQuery, domainDir, SP_NAME, PUBLIC_DIR, UPLOADS_SETTINGS_TABLE) {
-   /** @returns {(file: string, args: import('server/router').IRouterArgs) => Promise<import('../domain/controllers/sp-controller').IApiResult<string>> } */
+   /** @returns {(file: string, args: import('server/src/router').IRouterArgs) => Promise<import('../domain/controllers/sp-controller').IApiResult<string>> } */
    function loadUploadController() {
       const sandbox = Object.freeze({
          console: Object.freeze(console),
@@ -159,14 +159,14 @@ function createUploadRouter(poolQuery, domainDir, SP_NAME, PUBLIC_DIR, UPLOADS_S
 
    /**
     * @param {string} fileName
-    * @param {import('server/router').IRouterArgs} args
+    * @param {import('server/src/router').IRouterArgs} args
     */
    const handler = async (fileName, args) => {
       const resData = await uploadController(fileName, args)
       return createResponse(resData.result, resData.message, resData.statusCode)
    }
 
-   /** @param {import('server/router').IRouterArgs} args */
+   /** @param {import('server/src/router').IRouterArgs} args */
    const isUrlAccepted = args => {
       // console.log({args});
       if (args.method !== 'POST') return false
