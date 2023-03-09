@@ -23,7 +23,8 @@ const createSpController = (tableName, models, createDbClient) => {
 
    return Object.freeze({
       cols: () => withTryCatch(async (model) => {
-         const result = await model.cols()
+         let result = await model.cols()
+         result = result.filter(el => el.column_name !== 'id')
          if (result.length === 0) throw new Error('Table not found')
          return { statusCode: 200, message: 'OK', result }
       }),

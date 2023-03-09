@@ -26,7 +26,7 @@ export const createSaveData = (props, actionType) =>  {
    watch(() => bean, () => isBeanChanged.value = true, { deep: true })
 
    const init = async () => {
-      cols.value = (await api[props.schema][props.table].GetCols()).filter(col => col.column_name !== 'id')
+      cols.value = (await api[props.schema][props.table].GetCols())
       if (actionType === 'insert') bean.value = findBean0(cols.value)
       else if ((actionType === 'copy' || actionType === 'update') && props.id !== undefined) {
          bean.value = await api[props.schema][props.table].GetBean(props.id)

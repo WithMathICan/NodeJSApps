@@ -41,7 +41,6 @@ function createApiHandler(url, isPostDataNeeded, apiFunc) {
          return createResponse(resData.result, resData.message, resData.statusCode)
       }
    }
-
    return apiHandler
 }
 
