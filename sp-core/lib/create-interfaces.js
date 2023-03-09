@@ -2,7 +2,7 @@
 
 const fs = require('node:fs')
 const path = require('node:path')
-const { snakeToPascalCase } = require('common')
+const { snakeToPascalCase } = require('../../common')
 const { findDbTables, findColumns  } = require('./sp-functions.js')
 
 /** @param {import('../classes/Col').Col} col */

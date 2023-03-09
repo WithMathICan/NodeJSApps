@@ -11,9 +11,21 @@ export interface IRouterArgs {
    postParams?: Record<string, any>
    uploadedFilePath?: string
 }
+interface IUploadGetParams {
+   schema: string
+   table: string
+   fileName: string
+   fileType: string
+   lastModified: string
+   size: string
+}
+
+export interface IAploadArgs extends IRouterArgs {
+   getParams: IUploadGetParams
+}
 export interface IUploadRouter {
    isUrlAccepted: (args: IRouterArgs) => boolean
-   handler: (tempFile: string, args: IRouterArgs) => Promise<IServerResponse<{message: string, result: string}>>
+   handler: (tempFile: string, args: IAploadArgs) => Promise<IServerResponse<{message: string, result: string}>>
    findNameForTemporaryFile: () => string
 }
 

@@ -10,7 +10,7 @@ const {
    camelToKebabCase, camelToPascalCase, camelToSnakeCase,
    snakeToCamelCase, snakeToKebabCase, snakeToPascalCase,
 } = require('./src/string-cases.js')
-const { md5, generateToken, randomString, generateUUID } = require('./src/crypto-functions.js')
+const { md5, randomToken, randomString, randomStringWithExactSize, generateUUID } = require('./src/crypto-functions.js')
 const { isFileExist } = require('./src/fs-functions.js')
 
 module.exports = {
@@ -31,8 +31,9 @@ module.exports = {
    snakeToKebabCase,
    snakeToPascalCase,
    md5,
-   generateToken,
+   randomToken,
    randomString,
    generateUUID,
    isFileExist,
+   randomStringWithExactSize,
 }

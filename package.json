@@ -9,7 +9,8 @@
     "lint": "eslint . && tsc \"**/*.js\" \"**/*.ts\"",
     "lint-fix": "eslint --fix . ",
     "fmt": "prettier --write \"**/*.js\" \"**/*.ts\"",
-    "dev-sp": "nodemon smart-panel/index",
+    "dev-sp-old": "nodemon smart-panel/index",
+    "dev-sp": "nodemon sp-application/main",
     "dev-vue": "cd vue && npm run dev",
     "dev-c": "concurrently npm:dev-sp npm:dev-vue",
     "dev": "run-p dev-sp dev-vue"
