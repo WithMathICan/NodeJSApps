@@ -8,6 +8,7 @@
    <Calendar v-else-if="col.data_type === 'date'" class="w-full" :required="!col.is_nullable" 
       v-model="bean[col.column_name]" :showTime="true" />
    <InputFk v-else-if="col.data_type === 'fk'" :bean="bean" :col="col"></InputFk>
+   <InputM2MTree v-else-if="col.data_type === 'm2m' && col.m2m.isTree" :bean="bean" :col="col"></InputM2MTree>
    <InputM2M v-else-if="col.data_type === 'm2m'" :bean="bean" :col="col"></InputM2M>
    <InputFile v-else-if="col.data_type === 'file'" v-model="bean[col.column_name]"  
       :schema="col.table_schema" :table="col.table_name" :field_name="col.column_name" ></InputFile>
@@ -24,6 +25,7 @@ import InputFk from './InputFk.vue'
 import InputM2M from './InputM2M.vue';
 import InputFile from './InputFile.vue';
 import InputKeyValue from './InputKeyValue.vue';
+import InputM2MTree from './InputM2MTree.vue';
 
 /** @type {{bean: any, col: import('types').Col}} */ // @ts-ignore
 let props = defineProps(['bean', 'col']) 

@@ -1,7 +1,7 @@
 <template>
    <MultiSelect class="w-full" v-model="bean[col.column_name]" :required="!col.is_nullable"
       :options="showOptions" display="chip" optionLabel="___m2m_title"
-      :optionValue="'id'" :filter="(showOptions.length>1)">
+      optionValue="id" :filter="(showOptions.length>1)">
    </MultiSelect>
 </template>
 
@@ -12,6 +12,7 @@ import MultiSelect from 'primevue/multiselect';
 
 /** @type {{bean: any, col: import('types').Col}} */ // @ts-ignore
 let props = defineProps(['bean', 'col']) 
+
 FillBeans(props.col.table_schema, props.col.m2m.table)
 let key = spTableKey(props.col.table_schema, props.col.m2m.table)
 let showOptions = computed(() => {
