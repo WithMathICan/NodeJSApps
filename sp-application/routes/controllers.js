@@ -10,7 +10,7 @@ const controllers = {}
  * @param {Record<string, string[]>} dbTables
  * @param {import("common/types").FDbClientCreator} createDbClient
  */
-function fillControllers(dbTables, createDbClient) {
+async function fillControllers(dbTables, createDbClient) {
    for (const key in controllers) delete controllers[key]
    for (const schema in dbTables) for (const table of dbTables[schema]) {
       const spController = createSpController(`${schema}.${table}`, models, createDbClient)
