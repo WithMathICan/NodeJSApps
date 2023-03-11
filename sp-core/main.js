@@ -5,6 +5,7 @@ const { createSpModel } = require('./model/sp-model')
 const { createSpController } = require('./model/sp-controller')
 const { createCols, findColumns, findDbTables } = require('./lib/sp-functions')
 const { createInterfaces } = require('./lib/create-interfaces')
+const { createPermissions } = require('./lib/create-permissions.js')
 
 module.exports = {
    Col,
@@ -14,4 +15,5 @@ module.exports = {
    findColumns,
    findDbTables,
    createInterfaces,
+   createPermissions,
 }

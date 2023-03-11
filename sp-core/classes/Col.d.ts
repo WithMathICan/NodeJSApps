@@ -35,8 +35,9 @@ export interface IDbCol{
 
 export interface IM2M {
    table: string
-   title_column: string
+   title_column: string | string[]
    connecting_table: string
+   isTree?: boolean
 }
 
 export interface IKeyValue {

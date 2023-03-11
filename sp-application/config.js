@@ -4,7 +4,7 @@ const API_PREFIX = 'api/smart-panel'
 
 /** @type {import("./config").IConfig} */
 const config = {
-   DB_SCHEMAS: ['public', 'country'],
+   DB_SCHEMAS: ['public', 'country', 'secret'],
    DB_SETTINGS: {
       database: 'smart',
       user: 'postgres',
