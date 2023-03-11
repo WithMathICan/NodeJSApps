@@ -1,12 +1,7 @@
 <template>
    <MultiSelect class="w-full" v-model="bean[col.column_name]" :required="!col.is_nullable"
-      :options="showOptions" 
-      :optionValue="'id'" :filter="(showOptions.length>8)">
-      <template #option="slotProps">
-        <div class="flex align-items-center">
-            <div>{{ findLabel(slotProps.option) }}</div>
-        </div>
-    </template>
+      :options="showOptions" display="chip" optionLabel="___m2m_title"
+      :optionValue="'id'" :filter="(showOptions.length>1)">
    </MultiSelect>
 </template>
 
@@ -20,19 +15,24 @@ let props = defineProps(['bean', 'col'])
 FillBeans(props.col.table_schema, props.col.m2m.table)
 let key = spTableKey(props.col.table_schema, props.col.m2m.table)
 let showOptions = computed(() => {
-   if (Array.isArray(spBeans[key])) return spBeans[key].sort((a, b) => {
-      if (findLabel(a) > findLabel(b)) return 1
+   if (Array.isArray(spBeans[key])) return spBeans[key].map(wrapBeanByProxy).sort((a, b) => {
+      if (a['___m2m_title'] > b['___m2m_title']) return 1
       return -1
    })
    return []
 })
 
-function findLabel(bean) {
-   const title_column = props.col.m2m.title_column
-   if (typeof title_column === 'string') return bean[title_column]
-   else if (Array.isArray(title_column)) {
-      // @ts-ignore
-      return title_column.map(el => bean[el]).join('__')
-   } else return 'NoLabel'
+function wrapBeanByProxy(el) {
+   return new Proxy(el, {
+      get: (target, key) => {
+         if (key in target) return target[key]
+         if (key === '___m2m_title') {
+            const title_column = props.col.m2m.title_column
+            if (typeof title_column === 'string') return target[title_column]
+            if (Array.isArray(title_column)) return title_column.map(el => target[el]).join('__')
+            return 'NoLabel'
+         }
+      }
+   })
 }
 </script>
