@@ -6,7 +6,7 @@
 <script setup>
 import Tree from 'primevue/tree'
 import { FillBeans } from '../../store';
-import { cref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
 /** @type {{bean: any, col: import('types').Col}} */ // @ts-ignore
 let props = defineProps(['bean', 'col'])
