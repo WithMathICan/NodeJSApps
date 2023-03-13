@@ -1,6 +1,6 @@
 <template>
    <Menubar :model="menuItems" />
-   <div class="container p-2">
+   <div class="container p-2 main-container">
       <router-view />
       <div id="toast-container">
          <transition-group name="p-message" tag="div">
@@ -33,6 +33,9 @@ import Message from 'primevue/message'
    left: 0;
    width: 100%;
    padding: 0 10px;
+}
+.main-container {
+   margin-bottom: 16rem;
 }
 </style>
 
