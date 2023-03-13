@@ -5,21 +5,48 @@
 
 <script setup>
 import Tree from 'primevue/tree'
-import { FillBeans, spBeans, spTableKey } from '../../store';
-import { computed, ref, onMounted } from 'vue'
+import { FillBeans } from '../../store';
+import { cref, onMounted } from 'vue'
 
 /** @type {{bean: any, col: import('types').Col}} */ // @ts-ignore
 let props = defineProps(['bean', 'col'])
 
 /** @type {import('vue').Ref<import('primevue/tree').TreeSelectionKeys>} */
 const selectionKeys = ref([])
+/** @type {Record<string, import('primevue/tree').TreeNode>} */
+const treeLeafs = {}
+/** @type {import('primevue/tree').TreeNode[]} */
+let nodes = []
 
-const beans = computed(() => spBeans[spTableKey(props.col.table_schema, props.col.m2m.table)] ?? [])
-const leafs = computed(() => {
-   const key = props.col.m2m.title_column[props.col.m2m.title_column.length - 1]
-   /** @type {Record<string, import('primevue/tree').TreeNode>} */
-   const treeLeafs = {}
-   for (let item of beans.value) {
+function init() {
+   FillBeans(props.col.table_schema, props.col.m2m.table).then(beans => {
+      const lastIndex = props.col.m2m.title_column[props.col.m2m.title_column.length - 1]
+      findTreeLeafs(lastIndex, beans)
+      nodes = findTree()
+      selectionKeys.value = findSelectedNodes(nodes)
+   })
+}
+
+onMounted(init)
+
+
+
+function onNodeSelect() {
+   // console.log(node);
+   const arr = []
+   for (let key in selectionKeys.value){
+      if (key in treeLeafs) arr.push(key)
+   }
+   props.bean[props.col.column_name] = arr
+}
+
+/**
+ * @param {string} key 
+ * @param {import('types').DbRecord[]} beans 
+ */
+ function findTreeLeafs(key, beans) {
+   for (let key in treeLeafs) delete treeLeafs[key]
+   for (let item of beans) {
       treeLeafs[item.id] = {
          key: item.id,
          data: item,
@@ -27,31 +54,25 @@ const leafs = computed(() => {
          leaf: true,
       }
    }
-   return treeLeafs
-})
+}
 
-const nodes = computed(() => {
+function findTree() {
    /** @type {import('primevue/tree').TreeNode[]} */
    const treeNodes = []
    const { title_column } = props.col.m2m
    if (!Array.isArray(title_column)) return treeNodes
-   if (title_column.length < 2) return Object.values(leafs.value)
-   treeNodes.push({ key: '', label: 'initial___node', data: Object.values(leafs.value) })
+   if (title_column.length < 2) return Object.values(treeLeafs)
+   treeNodes.push({ key: '', label: 'initial___node', data: Object.values(treeLeafs) })
    filterLeafs(treeNodes[0], 0)
    return treeNodes[0].children ?? []
-})
+}
 
-onMounted(() => {
-   FillBeans(props.col.table_schema, props.col.m2m.table).then(() => {
-      selectionKeys.value = findSelectedNodes(nodes.value)
-   })
-})
 
 /**
  * @param {import('primevue/tree').TreeNode} parentNode 
  * @param {number} idx
  */
-function filterLeafs(parentNode, idx) {
+ function filterLeafs(parentNode, idx) {
    const fieldsArr = props.col.m2m.title_column
    parentNode.children = []
    const fieldName = fieldsArr[idx]
@@ -70,6 +91,7 @@ function filterLeafs(parentNode, idx) {
    delete parentNode.data
    if (!isLastLevel) for (const node of parentNode.children) filterLeafs(node, idx + 1)
 }
+
 
 /** @param {import('primevue/tree').TreeNode[] } treeNodes */
 const findSelectedNodes = (treeNodes) => {
@@ -104,14 +126,4 @@ const findSelectedNodes = (treeNodes) => {
    }
    return keys
 }
-
-function onNodeSelect() {
-   // console.log(node);
-   const arr = []
-   for (let key in selectionKeys.value){
-      if (key in leafs.value) arr.push(key)
-   }
-   props.bean[props.col.column_name] = arr
-}
-
 </script>
