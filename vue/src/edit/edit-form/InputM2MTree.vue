@@ -29,8 +29,6 @@ function init() {
 
 onMounted(init)
 
-
-
 function onNodeSelect() {
    // console.log(node);
    const arr = []
@@ -105,22 +103,20 @@ const findSelectedNodes = (treeNodes) => {
       else {
          let newKeys = findSelectedNodes(treeNode.children ?? [])
          let checkedCount = 0
+         let partialCheckedCount = 0
          for (let ii in newKeys) {
-            if (newKeys[ii].checked) {
-               // console.log(ii);
-               for (let ch of treeNode.children ?? []) {
-                  // console.log({choldren__key: ch.key});
-                  if (ch.key == ii) checkedCount += 1
-               }
+            for (let ch of treeNode.children ?? []) {
+               if (newKeys[ii].checked) if (ch.key == ii) checkedCount += 1
+               if (newKeys[ii].partialChecked) if (ch.key == ii) partialCheckedCount += 1
             }
             keys[ii] = newKeys[ii]
          }
+         if (!treeNode.key) throw new Error('!treeNode.key')
          if (checkedCount > 0){
-            // console.log(newKeys);
-            // console.log(checkedCount, Object.keys(newKeys).length);
-            if (!treeNode.key) return keys
             if (checkedCount === treeNode.children?.length) keys[treeNode.key] = { checked: true, partialChecked: false }
             else  keys[treeNode.key] = { checked: false, partialChecked: true }
+         } else if (partialCheckedCount > 0) {
+            keys[treeNode.key] = { checked: false, partialChecked: true }
          }
       }
    }
