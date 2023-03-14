@@ -44,7 +44,9 @@ CREATE TABLE country.tags(
 
 CREATE TABLE country.city___tags(
     city_id INTEGER,
-    tag_id VARCHAR(50),
+    tag_id INTEGER,
+    CONSTRAINT fk_secret_city___tags_city_id FOREIGN KEY (city_id) REFERENCES country.city(id) ON DELETE CASCADE,
+    CONSTRAINT fk_secret_city___tags_tag_id FOREIGN KEY (tag_id) REFERENCES country.tags(id) ON DELETE CASCADE,
     PRIMARY KEY (city_id, tag_id)
 );
 

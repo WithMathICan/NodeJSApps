@@ -12,9 +12,13 @@ const createSpController = (tableName, models, createDbClient) => {
       try {
          if (!models[tableName]) throw new Error('Модель для таблицы не найденна')
          const model = models[tableName](dbClient.query)
-         return await func(model)
+         dbClient.beginTransaction()
+         const result = await func(model)
+         dbClient.commit()
+         return result
       } catch (/** @type {any} */ e) {
          console.error(e);
+         dbClient.rollback()
          return { statusCode: 404, message: e.message, result: [] }
       } finally {
          dbClient.release()

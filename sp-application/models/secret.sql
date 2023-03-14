@@ -19,8 +19,10 @@ CREATE TABLE secret.group(
    permissions INTEGER[]
 );
 
-CREATE TABLE country.permission___group(
+CREATE TABLE secret.permission___group(
    permission_id INTEGER,
-   group_id VARCHAR(50),
+   group_id INTEGER,
+   CONSTRAINT fk_secret_permission___group_permission_id FOREIGN KEY (permission_id) REFERENCES secret.permission(id) ON DELETE CASCADE,
+   CONSTRAINT fk_secret_permission___group_group_id FOREIGN KEY (group_id) REFERENCES secret.group(id) ON DELETE CASCADE,
    PRIMARY KEY (permission_id, group_id)
 );
