@@ -27,10 +27,10 @@ const createSpController = (tableName, models, createDbClient) => {
 
    return Object.freeze({
       cols: () => withTryCatch(async (model) => {
-         let result = await model.cols()
-         result = result.filter(el => el.column_name !== 'id')
-         if (result.length === 0) throw new Error('Table not found')
-         return { statusCode: 200, message: 'OK', result }
+         const colsDictionary = await model.cols()
+         delete colsDictionary.id
+         if (Object.keys(colsDictionary).length === 0) throw new Error('Table not found')
+         return { statusCode: 200, message: 'OK', result: Object.values(colsDictionary) }
       }),
       bean: ({ id, fields = ['*'] }) => withTryCatch(async (model) => {
          const result = await model.bean(id, fields)
