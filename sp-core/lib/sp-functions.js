@@ -76,13 +76,16 @@ function updateColumns(cols, dbForeignKeys, fk_title_name) {
 * @param {string} database
 * @param {import('common/types').FQuery} query
 * @param {string} fk_title_name
-* @returns {Promise<Col[]>}
+* @returns {Promise<Record<string, Col>>}
 */
 async function createCols(schema, table, database, query, fk_title_name) {
    const cols = await findColumns(schema, table, database, query)
    const { rows } = await query(MY_SQL_FK, [schema, table])
    updateColumns(cols, rows, fk_title_name)
-   return cols
+   /** @type {Record<string, Col>} */
+   const result = {}
+   for (const col of cols) result[col.column_name] = col
+   return result
 }
 
 /**

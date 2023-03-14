@@ -11,17 +11,14 @@ function createModel(BaseModel) {
       }
 
       async cols() {
+         /** @type {Record<string, import('sp-core/types').Col>}*/
          const dbCols = await super.cols()
-         for (const col of dbCols) {
-            if (col.column_name === 'permissions') {
-               col.m2m = {
-                  table: 'permission',
-                  connecting_table: 'permission___group',
-                  title_column: ['table_schema', 'table_name', 'permission_value'],
-                  isTree: true,
-               }
-               col.data_type = 'm2m'
-            }
+         dbCols['permissions'].data_type = 'm2m'
+         dbCols['permissions'].m2m = {
+            table: 'permission',
+            connecting_table: 'permission___group',
+            title_column: ['table_schema', 'table_name', 'permission_value'],
+            isTree: true,
          }
          return dbCols
       }

@@ -18,25 +18,24 @@ function createModel(BaseModel) {
       }
 
       async cols() {
+         /** @type {Record<string, import('sp-core/types').Col>}*/
          const dbCols = await super.cols()
-         for (const col of dbCols) {
-            if (col.column_name === 'tags') {
-               col.m2m = {
-                  table: 'tag',
-                  connecting_table: 'city___tag',
-                  title_column: 'title',
-               }
-               col.data_type = 'm2m'
-            }
-            if (col.column_name === 'img') col.data_type = 'file'
-            if (col.column_name === 'attributes') {
-               col.data_type = 'key-value'
-               col.keyValue = {
-                  keys_schema_name: 'country',
-                  keys_table_name: 'attribute',
-               }
-            }
+
+         dbCols['tags'].data_type = 'm2m'
+         dbCols['tags'].m2m = {
+            table: 'tag',
+            connecting_table: 'city___tag',
+            title_column: 'title',
          }
+
+         dbCols['img'].data_type = 'file'
+
+         dbCols['attributes'].data_type = 'key-value'
+         dbCols['attributes'].keyValue = {
+            keys_schema_name: 'country',
+            keys_table_name: 'attribute',
+         }
+
          return dbCols
       }
 

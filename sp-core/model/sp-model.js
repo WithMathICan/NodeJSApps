@@ -58,14 +58,16 @@ const createSpModel = (schema, table, PG_DATABASE, fk_title_name) => {
       }
 
       async cols() {
-         return await createCols(schema, table, PG_DATABASE, this.query, fk_title_name)
+         /** @type {Record<string, import('../types').Col>} */
+         const dbCols = await createCols(schema, table, PG_DATABASE, this.query, fk_title_name)
+         return dbCols
       }
 
       async insert(bean) {
          const cols = await this.cols()
          clearBeanFields(cols, bean)
          let result = await this.crud.insert(bean)
-         for (const col of cols) {
+         for (const col of Object.values(cols)) {
             if (col.m2m) {
                console.log('col.m2m');
                const insertedM2MValues = await insertM2M(result.id, result[col.column_name], `${col.table_name}_id`,
@@ -80,7 +82,7 @@ const createSpModel = (schema, table, PG_DATABASE, fk_title_name) => {
          const cols = await this.cols()
          clearBeanFields(cols, bean)
          let result = await this.crud.update(id, bean)
-         for (const col of cols) {
+         for (const col of Object.values(cols)) {
             if (col.m2m) {
                const insertedM2MValues = await insertM2M(result.id, result[col.column_name], `${col.table_name}_id`,
                   `${col.m2m.table}_id`, `${col.table_schema}.${col.m2m.connecting_table}`, this.query)

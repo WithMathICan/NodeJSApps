@@ -4,7 +4,7 @@ import { FQuery, DbRecord } from 'common/types'
 
 
 export interface ISpModel {
-   cols() : Promise<Col[]>
+   cols() : Promise<Record<string, Col>>
    bean(id: string, fields = ['*']): Promise<DbRecord | null>
    beans(fields = ['*']): Promise<DbRecord[]>
    insert(record: DbRecord): Promise<DbRecord>
@@ -14,7 +14,7 @@ export interface ISpModel {
 
 export class Model {
    constructor(query: FQuery)
-   cols() : Promise<Col[]>
+   cols() : Promise<Record<string, Col>>
    bean(id: string, fields = ['*']): Promise<DbRecord | null>
    beans(fields = ['*']): Promise<DbRecord[]>
    insert(record: DbRecord): Promise<DbRecord>
