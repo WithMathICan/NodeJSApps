@@ -38,7 +38,6 @@ async function findPermissionValues(permission_value_table, query) {
 
 async function createPermissions(permission_value_table, permission_table, dbTables, query) {
    const values = await findPermissionValues(permission_value_table, query)
-   console.log(values);
    const existingPermissions = await findExistingPermissions(permission_table, query)
    const permissionsToAdd = findPermissionsToAdd(existingPermissions, dbTables, values)
    for (const key in permissionsToAdd) {
