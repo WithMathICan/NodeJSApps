@@ -17,6 +17,11 @@ export interface ICountryRegion {
    updated_at: Date
 }
 
+export interface ICountryTag {
+   id: string
+   title: string
+}
+
 export interface ICountryCity {
    id: string
    title: string
@@ -29,11 +34,6 @@ export interface ICountryCity {
    tags: number
    img: string
    attributes: string
-}
-
-export interface ICountryTags {
-   id: string
-   title: string
 }
 
 export interface ICountryAttributeType {

@@ -5,7 +5,7 @@ const { createSpModel } = require('../../sp-core')
 const { isFileExist } = require('../../common')
 
 
-/** @type {Record<string, import('sp-core/model/sp-model').FSpModel>} */
+/** @type {Record<string, import('sp-core/model/sp-model').TModel>} */
 const models = {}
 
 /**

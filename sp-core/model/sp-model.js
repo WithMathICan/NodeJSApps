@@ -37,12 +37,11 @@ async function insertM2M(bean_id, m2m_id_arr, bean_field, m2m_filed, connectingT
  */
 async function removeUnusedM2M(bean_id, insertedValues, bean_field, m2m_filed, connectingTable, query) {
    const { rows } = await query(`SELECT * from ${connectingTable} where ${bean_field}=$1`, [bean_id])
-   for (const id of rows) {
-      const sql = `DELETE FROM ${connectingTable} where ${bean_field}=$1 and ${m2m_filed}=$2`
+   const sql = `DELETE FROM ${connectingTable} where ${bean_field}=$1 and ${m2m_filed}=$2`
+   for (const id of rows.map(el => el[m2m_filed])) {
       if (!insertedValues.includes(id)) await query(sql, [bean_id, id])
    }
 }
-
 
 /**
  * @type {import("./sp-model.d").FCreateSpModel}
@@ -50,50 +49,107 @@ async function removeUnusedM2M(bean_id, insertedValues, bean_field, m2m_filed, c
  * @param {string} table
  */
 const createSpModel = (schema, table, PG_DATABASE, fk_title_name) => {
-   /** @type {import("./sp-model.d").FSpModel} */
-   function model(query) {
-      const crud = createCRUD(schema, table, query)
-      const findCols = () => createCols(schema, table, PG_DATABASE, query, fk_title_name)
-      /** @type {import("./sp-model.d").ISpModel} */
-      const SpModel = {
-         cols: findCols,
-         insert: async bean => {
-            const cols = await findCols()
-            clearBeanFields(cols, bean)
-            let result = await crud.insert(bean)
-            for (const col of cols) {
-               if (col.m2m) {
-                  console.log('col.m2m');
-                  const insertedM2MValues = await insertM2M(result.id, result[col.column_name], `${col.table_schema}.${col.table_name}`,
-                     `${col.table_schema}.${col.m2m.connecting_table}`, col.m2m.connecting_table, query)
-                  result = await crud.update(result.id, { [col.column_name]: insertedM2MValues })
-               }
-            }
-            return result
-         },
-         update: async (id, bean) => {
-            const cols = await findCols()
-            clearBeanFields(cols, bean)
-            let result = await crud.update(id, bean)
-            for (const col of cols) {
-               if (col.m2m) {
-                  console.log('col.m2m');
-                  const insertedM2MValues = await insertM2M(result.id, result[col.column_name], `${col.table_schema}.${col.table_name}`,
-                     `${col.table_schema}.${col.m2m.connecting_table}`, col.m2m.connecting_table, query)
-                  result = await crud.update(result.id, { [col.column_name]: insertedM2MValues })
-                  await removeUnusedM2M(result.id, result[col.column_name], `${col.table_schema}.${col.table_name}`,
-                     `${col.table_schema}.${col.m2m.connecting_table}`, col.m2m.connecting_table, query)
-               }
-            }
-            return result
-         },
-         bean: (id, fields = ['*']) => crud.findById(id, fields),
-         beans: (fields = ['*']) => crud.queryAll(`select ${fields.join(',')} from ${crud.tableName} order by id desc`),
-         removeMany: (ids) => crud.removeMany(ids)
+   /** @type {import('./sp-model').TModel} */
+   class Model {
+      /** @param {import("common/types").FQuery} query */
+      constructor(query) {
+         this.query = query
+         this.crud = createCRUD(schema, table, query)
       }
-      return Object.freeze(SpModel)
+
+      async cols() {
+         return await createCols(schema, table, PG_DATABASE, this.query, fk_title_name)
+      }
+
+      async insert(bean) {
+         const cols = await this.cols()
+         clearBeanFields(cols, bean)
+         let result = await this.crud.insert(bean)
+         for (const col of cols) {
+            if (col.m2m) {
+               console.log('col.m2m');
+               const insertedM2MValues = await insertM2M(result.id, result[col.column_name], `${col.table_name}_id`,
+                  `${col.m2m.table}_id`, `${col.table_schema}.${col.m2m.connecting_table}`, this.query)
+               result = await this.crud.update(result.id, { [col.column_name]: insertedM2MValues })
+            }
+         }
+         return result
+      }
+
+      async update(id, bean) {
+         const cols = await this.cols()
+         clearBeanFields(cols, bean)
+         let result = await this.crud.update(id, bean)
+         for (const col of cols) {
+            if (col.m2m) {
+               const insertedM2MValues = await insertM2M(result.id, result[col.column_name], `${col.table_name}_id`,
+                  `${col.m2m.table}_id`, `${col.table_schema}.${col.m2m.connecting_table}`, this.query)
+               result = await this.crud.update(result.id, { [col.column_name]: insertedM2MValues })
+               await removeUnusedM2M(result.id, result[col.column_name], `${col.table_name}_id`,
+                  `${col.m2m.table}_id`, `${col.table_schema}.${col.m2m.connecting_table}`, this.query)
+            }
+         }
+         return result
+      }
+
+      async bean(id, fields = ['*']) {
+         return await this.crud.findById(id, fields)
+      }
+
+      async beans(fields = ['*']) {
+         return await this.crud.queryAll(`select ${fields.join(',')} from ${this.crud.tableName} order by id desc`)
+      }
+
+      async removeMany(ids) {
+         return await this.crud.removeMany(ids)
+      }
    }
-   return model
+
+   return Model
+   // /** @type {import("./sp-model.d").FSpModel} */
+   // function model(query) {
+   //    const crud = createCRUD(schema, table, query)
+   //    const findCols = () => createCols(schema, table, PG_DATABASE, query, fk_title_name)
+   //    /** @type {import("./sp-model.d").ISpModel} */
+   //    const SpModel = {
+   //       cols: findCols,
+   //       insert: async bean => {
+   //          const cols = await findCols()
+   //          clearBeanFields(cols, bean)
+   //          let result = await crud.insert(bean)
+   //          for (const col of cols) {
+   //             if (col.m2m) {
+   //                console.log('col.m2m');
+   //                const insertedM2MValues = await insertM2M(result.id, result[col.column_name], `${col.table_schema}.${col.table_name}`,
+   //                   `${col.table_schema}.${col.m2m.connecting_table}`, col.m2m.connecting_table, query)
+   //                result = await crud.update(result.id, { [col.column_name]: insertedM2MValues })
+   //             }
+   //          }
+   //          return result
+   //       },
+   //       update: async (id, bean) => {
+   //          const cols = await findCols()
+   //          clearBeanFields(cols, bean)
+   //          let result = await crud.update(id, bean)
+   //          for (const col of cols) {
+   //             if (col.m2m) {
+   //                console.log('col.m2m');
+   //                const insertedM2MValues = await insertM2M(result.id, result[col.column_name], `${col.table_schema}.${col.table_name}`,
+   //                   `${col.table_schema}.${col.m2m.connecting_table}`, col.m2m.connecting_table, query)
+   //                result = await crud.update(result.id, { [col.column_name]: insertedM2MValues })
+   //                await removeUnusedM2M(result.id, result[col.column_name], `${col.table_schema}.${col.table_name}`,
+   //                   `${col.table_schema}.${col.m2m.connecting_table}`, col.m2m.connecting_table, query)
+   //             }
+   //          }
+   //          return result
+   //       },
+   //       bean: (id, fields = ['*']) => crud.findById(id, fields),
+   //       beans: (fields = ['*']) => crud.queryAll(`select ${fields.join(',')} from ${crud.tableName} order by id desc`),
+   //       removeMany: (ids) => crud.removeMany(ids)
+   //    }
+   //    return Object.freeze(SpModel)
+   // }
+   // return model
 }
 
 module.exports = { createSpModel }

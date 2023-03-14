@@ -35,18 +35,18 @@ CREATE TABLE country.city(
     CONSTRAINT fk_city_region_id FOREIGN KEY (region_id) REFERENCES country.region(id) ON DELETE NO ACTION
 );
 
-CREATE TABLE country.tags(
+CREATE TABLE country.tag(
     id SERIAL,
     title VARCHAR(50) NOT NULL,
     PRIMARY KEY(id)
 );
 -- CREATE UNIQUE INDEX country_tags_unique_alias ON country.tags(alias);
 
-CREATE TABLE country.city___tags(
+CREATE TABLE country.city___tag(
     city_id INTEGER,
     tag_id INTEGER,
-    CONSTRAINT fk_secret_city___tags_city_id FOREIGN KEY (city_id) REFERENCES country.city(id) ON DELETE CASCADE,
-    CONSTRAINT fk_secret_city___tags_tag_id FOREIGN KEY (tag_id) REFERENCES country.tags(id) ON DELETE CASCADE,
+    CONSTRAINT fk_secret_city___tag_city_id FOREIGN KEY (city_id) REFERENCES country.city(id) ON DELETE CASCADE,
+    CONSTRAINT fk_secret_city___tag_tag_id FOREIGN KEY (tag_id) REFERENCES country.tag(id) ON DELETE CASCADE,
     PRIMARY KEY (city_id, tag_id)
 );
 

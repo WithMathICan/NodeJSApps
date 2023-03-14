@@ -54,7 +54,7 @@ function findMimeType(filePath) {
 
 /**
  * @param {string} publicRoot
- * @param {import('../common/main').SpLogger} console
+ * @param {import('common/main').SpLogger} console
  * @returns {import('./router').FRouter<any>}
 */
 function createStaticRouter(publicRoot, console) {
@@ -86,7 +86,7 @@ function createStaticRouter(publicRoot, console) {
 /**
  * @param {string} publicRoot
  * @param {string} urlPrefix
- * @param {import('../common/main').SpLogger} console
+ * @param {import('common/main').SpLogger} console
  * @returns {import('./router').FRouter<any>}
  */
 function createIndexHtmlRouter(publicRoot, urlPrefix, console) {

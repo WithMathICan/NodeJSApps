@@ -1,7 +1,7 @@
 /**
  * @type {import('./sp-controller').FCreateSpController}
  * @param {string} tableName
- * @param {Record<string, import('./sp-model').FSpModel>} models
+ * @param {Record<string, import('./sp-model').TModel>} models
  * @param {import('common/types').FDbClientCreator} createDbClient
  */
 const createSpController = (tableName, models, createDbClient) => {
@@ -11,7 +11,7 @@ const createSpController = (tableName, models, createDbClient) => {
       const dbClient = await createDbClient()
       try {
          if (!models[tableName]) throw new Error('Модель для таблицы не найденна')
-         const model = models[tableName](dbClient.query)
+         const model = new models[tableName](dbClient.query)
          dbClient.beginTransaction()
          const result = await func(model)
          dbClient.commit()
