@@ -26,3 +26,20 @@ CREATE TABLE secret.permission___group(
    CONSTRAINT fk_secret_permission___group_group_id FOREIGN KEY (group_id) REFERENCES secret.group(id) ON DELETE CASCADE,
    PRIMARY KEY (permission_id, group_id)
 );
+
+CREATE TABLE secret.user(
+   id SERIAL PRIMARY KEY,
+   title VARCHAR(30) UNIQUE,
+   password VARCHAR(500),
+   groups INTEGER[]
+);
+
+CREATE TABLE secret.user___group(
+   user_id INTEGER,
+   group_id INTEGER,
+   CONSTRAINT fk_secret_user___group_user_id FOREIGN KEY (user_id) REFERENCES secret.user(id) ON DELETE NO ACTION,
+   CONSTRAINT fk_secret_user___group_group_id FOREIGN KEY (group_id) REFERENCES secret.group(id) ON DELETE NO ACTION,
+   PRIMARY KEY (user_id, group_id)
+);
+
+CREATE

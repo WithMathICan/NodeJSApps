@@ -17,3 +17,10 @@ export interface ISecretGroup {
    permissions: number
 }
 
+export interface ISecretUser {
+   id: string
+   title: string
+   password: string
+   groups: number
+}
+

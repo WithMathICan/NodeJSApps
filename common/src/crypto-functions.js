@@ -8,4 +8,17 @@ const randomStringWithExactSize = size => randomString(size).substring(0, size)
 const randomToken = size => crypto.randomBytes(size).toString('hex')
 const generateUUID = () => crypto.randomUUID()
 
-module.exports = { md5, randomString, randomToken, generateUUID, randomStringWithExactSize }
+function passwordHash(password) {
+   const buff = Buffer.from(password, 'utf-8');
+   const hash = buff.toString('base64');
+   return hash;
+}
+
+function passwordVerify(hash, password) {
+   return hash === passwordHash(password)
+}
+
+module.exports = {
+   md5, randomString, randomToken, generateUUID, randomStringWithExactSize,
+   passwordHash, passwordVerify,
+}

@@ -2,7 +2,7 @@ import { UpdateBeans } from '../store'
 import { ref, watch } from 'vue'
 import { api } from '../api'
 
-/** @param {import('../../../smart-panel/classes/Col').Col[]} colsData */
+/** @param {import('../../../sp-core/types').Col[]} colsData */
 function findBean0(colsData) {
    /** @type {import('../../../common/types').DbRecord} */ const record = {};
    for (const col of colsData) if (col.column_default !== null) {
@@ -18,12 +18,14 @@ function findBean0(colsData) {
 
 /** @type {import('./save-bean.service').FCreateSaveData} */
 export const createSaveData = (props, actionType) =>  {
+   /** @type {import('vue').Ref<import('../../../common/types').DbRecord>} */
    const bean = ref({})
-   /** @type {import('vue').Ref<import('../../../smart-panel/classes/Col').Col[]>} */
+   /** @type {import('vue').Ref<import('../../../sp-core/types').Col[]>} */
    const cols = ref([])
    const isBeanChanged = ref(false)
 
-   watch(() => bean, () => isBeanChanged.value = true, { deep: true })
+   let isExecuting = false
+   watch(() => bean, () => { if (!isExecuting) isBeanChanged.value = true; }, { deep: true })
 
    const init = async () => {
       cols.value = (await api[props.schema][props.table].GetCols())
@@ -36,12 +38,14 @@ export const createSaveData = (props, actionType) =>  {
 
    const save = () => new Promise(resolve => {
       const afterSave = (/** @type {import("../../../common/types").DbRecord | null} */ data) => {
-         isBeanChanged.value = false
          if (data && data.id) {
+            bean.value = data
             UpdateBeans(props.schema, props.table, data)
             resolve(data)
          }
+         setTimeout(() => { isBeanChanged.value = false; isExecuting = false; }, 0)
       }
+      isExecuting = true
       if (actionType === 'copy' || actionType === 'insert') {
          api[props.schema][props.table].InsertBean(bean.value).then(afterSave)
       }
