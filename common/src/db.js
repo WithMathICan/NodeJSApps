@@ -5,7 +5,7 @@ const { Pool } = require('pg')
 const createPgPool = (/** @type {import("pg").PoolConfig} */ data) => new Pool(data)
 
 /**
- * @param {{ connect: () => any; }} pool
+ * @param {Pool} pool
  */
 function initDbClientCreator(pool) {
    /** @returns {Promise<import('./db').IDbClient>} */

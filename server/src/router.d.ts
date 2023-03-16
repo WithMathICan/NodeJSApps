@@ -10,6 +10,7 @@ export interface IRouterArgs<TGet> {
    getParams: TGet
    postParams?: Record<string, any>
    uploadedFilePath?: string
+   cookies?: Record<string, any>
 }
 interface IUploadGetParams {
    schema: string

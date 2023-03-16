@@ -50,6 +50,7 @@ const createServer = (staticFolders, uploadRouter, routes, console) => {
          for (const apiHandler of routes) {
             if (apiHandler.isUrlAccepted(args)) {
                if (apiHandler.isPostDataNeeded) args.postParams = await receiveArgs(req)
+               args.cookies = parseCookies(req);
                resData = await apiHandler.handler(args)
                break
             }
@@ -66,6 +67,18 @@ const createServer = (staticFolders, uploadRouter, routes, console) => {
          else res.end('404 Not Found');
       }
    })
+
+   function parseCookies(request) {
+      const list = {};
+      const rc = request.headers.cookie;
+
+      rc && rc.split(';').forEach((cookie) => {
+         const parts = cookie.split('=');
+         list[parts.shift().trim()] = decodeURI(parts.join('='));
+      });
+
+      return list;
+   }
 
 
    /**  @param {import('node:http').IncomingMessage} req */

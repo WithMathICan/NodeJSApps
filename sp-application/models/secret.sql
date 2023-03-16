@@ -42,4 +42,14 @@ CREATE TABLE secret.user___group(
    PRIMARY KEY (user_id, group_id)
 );
 
-CREATE
+CREATE TABLE secret.session(
+   id SERIAL PRIMARY KEY,
+   session_id VARCHAR(100) UNIQUE NOT NULL,
+   ip_adress VARCHAR(20),
+   data JSON,
+   expires TIMESTAMPTZ NOT NULL,
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+

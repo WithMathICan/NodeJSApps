@@ -24,3 +24,13 @@ export interface ISecretUser {
    groups: number
 }
 
+export interface ISecretSession {
+   id: string
+   session_id: string
+   ip_adress: string
+   data: string
+   expires: Date
+   created_at: Date
+   updated_at: Date
+}
+
