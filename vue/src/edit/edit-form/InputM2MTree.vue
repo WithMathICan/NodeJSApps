@@ -94,6 +94,7 @@ function findTree() {
 /** @param {import('primevue/tree').TreeNode[] } treeNodes */
 const findSelectedNodes = (treeNodes) => {
    const selectedIds = props.bean[props.col.column_name]
+   if (!Array.isArray(selectedIds)) return []
    /** @type {import('primevue/tree').TreeSelectionKeys} */
    const keys = {}
    for (const treeNode of treeNodes) {
