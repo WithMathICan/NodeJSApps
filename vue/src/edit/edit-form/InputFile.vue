@@ -17,7 +17,7 @@
    </FileUpload> -->
 
    <FileUpload :customUpload="true" @uploader="myUploader" :multiple="false"
-      :maxFileSize="1000000">
+      :maxFileSize="100000000">
       <template #empty>
          <p>Drag and drop files to here to upload.</p>
          <Image v-if="modelValue" :src="modelValue" :alt="modelValue" width="250" preview />
@@ -38,11 +38,26 @@ const urlToUpload = (/** @type {string} */ fileName, /** @type {string} */ fileT
 
 const emit = defineEmits(['update:modelValue'])
 
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
 async function myUploader(e) {
    const file = e.files[0]; 
    try{
-      const url = urlToUpload(file.name, file.type, file.lastModified, file.size)
-      post(url, file).then(data => {
+      // const url = urlToUpload(file.name, file.type, file.lastModified, file.size)
+      const url = `${API_PATH}/${props.schema}/${props.table}/upload`
+      const data = JSON.stringify({
+         fileName: file.name,
+         fileType: file.type,
+         lastModified: file.lastModified,
+         size: file.size,
+         base64: await toBase64(file)
+      })
+      post(url, data).then(data => {
          console.log({data});
          emit('update:modelValue', data)
          console.log({model: props.modelValue});
