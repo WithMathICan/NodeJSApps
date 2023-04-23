@@ -38,7 +38,6 @@ async function start() {
    try {
       const data = await fetch(`${API_PATH}/init`, { method: 'POST', body: '{}', headers: { 'Accept': 'application/json' } })
       if (!data.ok) return;
-      // console.log(data);
       const { result } = await data.json()
       if (!result) return console.log('Ошибка при получении данных с сервера');
       CreateMenuItems(result)
