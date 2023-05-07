@@ -32,9 +32,9 @@ import { API_PATH } from '../../../config'
 
 /** @type {{schema: string, table: string, field_name: string, modelValue: string}} */ // @ts-ignore
 let props = defineProps(['schema', 'table', 'field_name', 'modelValue'])
-const urlToUpload = (/** @type {string} */ fileName, /** @type {string} */ fileType, /** @type {string} */ lastModified, /** @type {string} */ size) => 
-   `${API_PATH}/upload?schema=${props.schema}&table=${props.table}&field_name=${props.field_name}` +
-   `&fileName=${fileName}&fileType=${fileType}&lastModified=${lastModified}&size=${size}`;
+// const urlToUpload = (/** @type {string} */ fileName, /** @type {string} */ fileType, /** @type {string} */ lastModified, /** @type {string} */ size) => 
+   // `${API_PATH}/upload?schema=${props.schema}&table=${props.table}&field_name=${props.field_name}` +
+   // `&fileName=${fileName}&fileType=${fileType}&lastModified=${lastModified}&size=${size}`;
 
 const emit = defineEmits(['update:modelValue'])
 

@@ -6,7 +6,7 @@ export const messages = reactive({})
 /**
  *
  * @param {string} content
- * @param {number} life Time in miliseconds
+ * @param {number} life Time in milliseconds
  * @param {import("./api").TMsgSeverity } severity
  * @param {boolean} closable
  */
