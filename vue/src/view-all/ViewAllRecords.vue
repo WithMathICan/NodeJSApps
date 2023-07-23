@@ -181,7 +181,6 @@ const treeView = computed(() => {
    // if (field === 'simple') return []
    const resBeans = []
    const beansObject = {}
-   /** @type {import('../../../smart-panel/domain/country').country_category[]} */ //@ts-ignore
    const beans = spBeans[tableKey.value]
    if (!Array.isArray(beans)) return []
    if (beans.length === 0) return []
